@@ -10,7 +10,7 @@ public enum ValidationResult {
     case Success
     case Failure(ErrorType)
     
-    var isValid : Bool {
+    public var isValid : Bool {
         if case .Success = self {
             return true
         }
