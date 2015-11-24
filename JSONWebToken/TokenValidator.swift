@@ -32,7 +32,7 @@ public struct CombinedValidatorError : ErrorType {
     public let errors : [ErrorType]
 }
 
-func &(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSONWebTokenValidatorType {
+public func &(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSONWebTokenValidatorType {
     let and = { (token : JSONWebToken) -> ValidationResult in
         let errors = [lhs,rhs].map{ $0.validateToken(token) }.map { validation -> ErrorType? in
             if case ValidationResult.Failure(let error) = validation {
@@ -47,7 +47,7 @@ func &(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSON
     
 }
 
-func |(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSONWebTokenValidatorType {
+public func |(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSONWebTokenValidatorType {
     let or = { (token : JSONWebToken) -> ValidationResult in
         var errors = [ErrorType]()
         for validator in [lhs,rhs] {

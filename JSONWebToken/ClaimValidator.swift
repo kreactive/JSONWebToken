@@ -37,6 +37,13 @@ public struct ClaimValidator<T> : JSONWebTokenValidatorType {
         }
         return result
     }
+    public func withValidator(validator : (T) -> Bool) -> ClaimValidator<T> {
+        return self.withValidator {
+            return validator($0) ? .Success : .Failure(ClaimValidatorError(message: "custom validation failed for key \(self.key)"))
+        }
+    }
+    
+    
     public var optionalValidator : ClaimValidator<T> {
         var result = self
         result.optional = true
@@ -87,15 +94,15 @@ public let AudienceValidator = ClaimValidator(claim: .Audience, transform: { val
     }
 })
 
-public let ExpirationTimeValidator = ClaimValidator(claim: .ExpirationTime, transform: DateClaimTransform).withValidator { date in
-    if date.timeIntervalSinceNow <= 0.0 {
+public let ExpirationTimeValidator = ClaimValidator(claim: .ExpirationTime, transform: DateClaimTransform).withValidator { date -> ValidationResult in
+    if date.timeIntervalSinceNow >= 0.0 {
         return .Success
     } else {
         return .Failure(ClaimValidatorError(message: "token is expired"))
     }
 }
-public let NotBeforeValidator = ClaimValidator(claim: .NotBefore, transform: DateClaimTransform).withValidator { date in
-    if date.timeIntervalSinceNow >= 0.0 {
+public let NotBeforeValidator = ClaimValidator(claim: .NotBefore, transform: DateClaimTransform).withValidator { date -> ValidationResult in
+    if date.timeIntervalSinceNow <= 0.0 {
         return .Success
     } else {
         return .Failure(ClaimValidatorError(message: "token cannot be used before \(date)"))

@@ -42,3 +42,40 @@ writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='RS
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey2, algorithm='RS256'),'RS256_2.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey2, algorithm='RS384'),'RS384_2.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey2, algorithm='RS512'),'RS512_2.jwt')
+
+
+all_claim_valid_1 = {
+    'iss' : 'kreactive',
+    'sub' : 'antoine',
+    'aud' : 'test-app',
+    'exp' : 1735689600,
+    'nbf' : 0,
+    'iat' : 1448371704,
+    'jti' : '123456789'
+}
+writeToSampleDirectory(jwt.encode(all_claim_valid_1, None,algorithm='none'),'all_claim_valid_1.jwt')
+
+all_claim_valid_2 = {
+    'iss' : 'kreactive',
+    'sub' : 'antoine',
+    'aud' : ['test-app','test-app2'],
+    'exp' : 1735689600,
+    'nbf' : 0,
+    'iat' : 1448371704,
+    'jti' : '123456789'
+}
+writeToSampleDirectory(jwt.encode(all_claim_valid_2, None,algorithm='none'),'all_claim_valid_2.jwt')
+
+
+all_claim_valid_2_signed = {
+    'iss' : 'kreactive',
+    'sub' : 'antoine',
+    'aud' : ['test-app','test-app2'],
+    'exp' : 1735689600,
+    'nbf' : 0,
+    'iat' : 1448371704,
+    'jti' : '123456789'
+}
+
+writeToSampleDirectory(jwt.encode(all_claim_valid_2_signed, cryptoSymSecret ,algorithm='HS256'),'all_claim_valid_2_signed.jwt')
+writeToSampleDirectory(jwt.encode({}, None ,algorithm='none'),'empty.jwt')

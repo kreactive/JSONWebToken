@@ -9,10 +9,12 @@
 import Foundation
 import JSONWebToken
 
-func ReadSampleWithName(name : String) -> JSONWebToken {
+func ReadRawSampleWithName(name : String) -> String {
     let path = NSBundle(forClass: HMACTests.self).pathForResource(name, ofType: "jwt")!
-    let stringValue = try! String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
-    return try! JSONWebToken(string : stringValue)
+    return try! String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+}
+func ReadSampleWithName(name : String) -> JSONWebToken {
+    return try! JSONWebToken(string : ReadRawSampleWithName(name))
 }
 
 var SamplePublicKey : SignatureKey = {

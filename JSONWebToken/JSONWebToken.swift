@@ -12,7 +12,8 @@ public struct JSONWebToken {
     public enum Error : ErrorType {
         case BadTokenStructure
         case CannotDecodeBase64Part(JSONWebToken.Part,String)
-        case BadJSONStructure(JSONWebToken.Part)
+        case InvalidJSON(JSONWebToken.Part,ErrorType)
+        case InvalidJSONStructure(JSONWebToken.Part)
         case TypeIsNotAJSONWebToken
         case InvalidSignatureAlgorithm(String)
         case MissingSignatureAlgorithm
@@ -141,8 +142,8 @@ public struct JSONWebToken {
     }
     
     
-    let signatureAlgorithm : SignatureAlgorithm
-    let payload : Payload
+    public let signatureAlgorithm : SignatureAlgorithm
+    public let payload : Payload
     let base64Parts : (header : String,payload : String, signature : String)
     
     public init(string input: String) throws {
@@ -158,9 +159,12 @@ public struct JSONWebToken {
         guard let payloadData = NSData(base64URLEncodedString: base64Parts.payload, options: []) else {
             throw Error.CannotDecodeBase64Part(.Payload,base64Parts.payload)
         }
-        guard let jsonHeader = try NSJSONSerialization.JSONObjectWithData(headerData, options: []) as? NSDictionary else {
-            throw Error.BadJSONStructure(.Header)
+        guard NSData(base64URLEncodedString: base64Parts.signature, options: []) != nil else {
+            throw Error.CannotDecodeBase64Part(.Signature,base64Parts.signature)
         }
+        
+        let jsonHeader = try JSONWebToken.jwtJSONFromData(headerData,part: .Header)
+        
         guard (jsonHeader["typ"] as? String).map({$0.uppercaseString == "JWT"}) ?? true else {
             throw Error.TypeIsNotAJSONWebToken
         }
@@ -169,11 +173,23 @@ public struct JSONWebToken {
         }
         self.signatureAlgorithm = signatureAlgorithm
         
-        guard let jsonPayload = try NSJSONSerialization.JSONObjectWithData(payloadData, options: []) as? [String : AnyObject] else {
-            throw Error.BadJSONStructure(.Payload)
-        }
+        let jsonPayload = try JSONWebToken.jwtJSONFromData(payloadData,part: .Payload)
+
         self.payload = Payload(jsonPayload: jsonPayload)
     }
+    private static func jwtJSONFromData(data : NSData, part : JSONWebToken.Part) throws -> [String : AnyObject] {
+        let json : AnyObject
+        do {
+            json = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+        } catch {
+            throw Error.InvalidJSON(part,error)
+        }
+        guard let result = json as? [String : AnyObject] else {
+            throw Error.InvalidJSONStructure(part)
+        }
+        return result
+    }
+    
     public init(payload : Payload, signer : TokenSigner? = nil) throws {
         self.signatureAlgorithm = signer?.signatureAlgorithm ?? SignatureAlgorithm.None
         self.payload = payload
