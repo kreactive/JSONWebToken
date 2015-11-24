@@ -49,4 +49,7 @@ public struct SignatureKey {
     public init(keyModulus : NSData, keyExponent: NSData,tag: String) throws  {
         self.value = try SecKeyCreate(keyModulus: keyModulus, keyExponent: keyExponent, tag: tag)
     }
+    public init(pemKey keyData: NSData, tag : String) throws {
+        self.value = try SecKeyCreate(pemKey: keyData, tag: tag)
+    }
 }

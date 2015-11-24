@@ -42,8 +42,41 @@
 import Foundation
 import Security
 
+enum PEMKeyError : ErrorType {
+    case NotStringReadable
+    case MissingPEMHeader
+    case MissingPEMFooter
+    case NoContent
 
-
+}
+internal func SecKeyCreate(pemKey keyData: NSData, tag : String) throws -> SecKey {
+    guard let stringValue = String(data: keyData, encoding: NSUTF8StringEncoding) else {
+        throw PEMKeyError.NotStringReadable
+    }
+    //remove ----BEGIN and ----END
+    let scanner = NSScanner(string: stringValue)
+    guard scanner.scanString("-----BEGIN", intoString: nil) else {
+        throw PEMKeyError.MissingPEMHeader
+    }
+    scanner.scanUpToString("KEY-----", intoString: nil)
+    guard scanner.scanString("KEY-----", intoString: nil) else {
+        throw PEMKeyError.MissingPEMHeader
+    }
+    
+    var content : NSString? = nil
+    scanner.scanUpToString("-----END", intoString: &content)
+    guard scanner.scanString("-----END", intoString: nil) else {
+        throw PEMKeyError.MissingPEMFooter
+    }
+    guard let base64Content = content?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) else {
+        throw PEMKeyError.NoContent
+    }
+    guard let keyData = NSData(base64EncodedString: base64Content, options: [.IgnoreUnknownCharacters]) else {
+        throw PEMKeyError.NoContent
+    }
+    return try SecKeyCreate(keyData: keyData, tag: tag)
+    
+}
 // these functions use Keychain library side effect to create a SecKeyRef from key data
 internal func SecKeyCreate(keyData keyData: NSData, tag : String) throws -> SecKey {
     let key : SecKey? = try {
@@ -79,7 +112,11 @@ private func getKey(tag: String) throws -> SecKey? {
     
     switch status {
     case errSecSuccess:
-        return (keyRef as! SecKeyRef)
+        if keyRef != nil {
+            return (keyRef as! SecKey)
+        } else {
+            return nil
+        }
     case errSecItemNotFound:
         return nil
     default:
