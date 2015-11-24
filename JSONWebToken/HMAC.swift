@@ -11,7 +11,10 @@ import Foundation
 public struct HMACSignature : SignatureValidator,TokenSigner {
     let secret : NSData
     let hashFunction : SignatureAlgorithm.HashFunction
-    
+    public init(secret : NSData,hashFunction : SignatureAlgorithm.HashFunction) {
+        self.secret = secret
+        self.hashFunction = hashFunction
+    }
     public func canVerifyWithSignatureAlgorithm(alg : SignatureAlgorithm) -> Bool {
         if case SignatureAlgorithm.HMAC(self.hashFunction) = alg {
             return true
