@@ -1,4 +1,4 @@
-#https://github.com/jpadilla/pyjwt.git
+#https://github.com/jpadilla/pyjwt
 #pip install PyJWT
 
 import jwt
@@ -14,6 +14,7 @@ def writeToSampleDirectory(content,name):
 
 cryptoPayload = { 'sub': '1234567890','name': 'John Doe' }
 cryptoSymSecret = 'secret'
+
 
 publicKeyFile = open(sampleDirectory+'/public.pem', 'r')
 cryptoPublicKey = publicKeyFile.read()
@@ -31,6 +32,14 @@ privateKeyFile2 = open(sampleDirectory+'/private2.pem', 'r')
 cryptoPrivateKey2 = privateKeyFile2.read()
 privateKeyFile2.close()
 
+ECpublicKeyFile = open(sampleDirectory+'/EC_publicKey.pub', 'r')
+ECcryptoPublicKey = ECpublicKeyFile.read()
+ECpublicKeyFile.close()
+
+ECprivateKeyFile = open(sampleDirectory+'/EC_privateKey', 'r')
+ECcryptoPrivateKey = ECprivateKeyFile.read()
+ECprivateKeyFile.close()
+
 writeToSampleDirectory(jwt.encode(cryptoPayload, 'secret', algorithm='HS256'),'HS256.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, 'secret', algorithm='HS384'),'HS384.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, 'secret', algorithm='HS512'),'HS512.jwt')
@@ -38,6 +47,14 @@ writeToSampleDirectory(jwt.encode(cryptoPayload, 'secret', algorithm='HS512'),'H
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='RS256'),'RS256.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='RS384'),'RS384.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='RS512'),'RS512.jwt')
+
+writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='PS256'),'PS256.jwt')
+writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='PS384'),'PS384.jwt')
+writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey, algorithm='PS512'),'PS512.jwt')
+
+writeToSampleDirectory(jwt.encode(cryptoPayload, ECcryptoPrivateKey, algorithm='ES256'),'ES256.jwt')
+writeToSampleDirectory(jwt.encode(cryptoPayload, ECcryptoPrivateKey, algorithm='ES384'),'ES384.jwt')
+writeToSampleDirectory(jwt.encode(cryptoPayload, ECcryptoPrivateKey, algorithm='ES512'),'ES512.jwt')
 
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey2, algorithm='RS256'),'RS256_2.jwt')
 writeToSampleDirectory(jwt.encode(cryptoPayload, cryptoPrivateKey2, algorithm='RS384'),'RS384_2.jwt')

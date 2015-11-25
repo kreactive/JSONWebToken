@@ -210,14 +210,21 @@ public struct JSONWebToken {
     }
     
     
-    func decodedDataForPart(part : Part) -> NSData {
+    public func decodedDataForPart(part : Part) -> NSData {
         switch part {
         case .Header:
-            return NSData(base64URLEncodedString: base64Parts.header, options: []) ?? NSData()
+            return NSData(base64URLEncodedString: base64Parts.header, options: [])!
         case .Payload:
-            return NSData(base64URLEncodedString: base64Parts.payload, options: []) ?? NSData()
+            return NSData(base64URLEncodedString: base64Parts.payload, options: [])!
         case .Signature:
-            return NSData(base64URLEncodedString: base64Parts.signature, options: []) ?? NSData()
+            return NSData(base64URLEncodedString: base64Parts.signature, options: [])!
         }
+    }
+    
+    public var rawString : String {
+        return "\(base64Parts.header).\(base64Parts.payload).\(base64Parts.signature)"
+    }
+    public var rawData : NSData {
+        return self.rawString.dataUsingEncoding(NSUTF8StringEncoding)!
     }
 }

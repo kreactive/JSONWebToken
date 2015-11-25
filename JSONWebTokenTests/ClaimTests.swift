@@ -72,7 +72,13 @@ class ClaimTests : XCTestCase {
         let validatorOptional = IssuerValidator.optionalValidator & SubjectValidator.optionalValidator & JWTIdentifierValidator.optionalValidator & AudienceValidator.optionalValidator & ExpirationTimeValidator.optionalValidator & NotBeforeValidator.optionalValidator & IssuedAtValidator.optionalValidator
         let validationOpt = validatorOptional.validateToken(jwt)
         XCTAssertTrue(validationOpt.isValid)
-
+    }
+    func testOrCombine() {
+        let jwt = ReadSampleWithName("RS512")
+        let verifier = RSAPKCS1Verifier(hashFunction: .SHA512, key : SamplePublicKey)
+        let otherVerifier = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
+        XCTAssertTrue((verifier|otherVerifier).validateToken(jwt).isValid)
+        XCTAssertTrue((otherVerifier|verifier).validateToken(jwt).isValid)
 
     }
 }
