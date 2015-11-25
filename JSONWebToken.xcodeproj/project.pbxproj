@@ -29,6 +29,9 @@
 		717FCFDA1C060CDA00C7DDEB /* invalid_nbf_immature.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */; };
 		717FCFDB1C060CDA00C7DDEB /* invalid_sub_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */; };
 		718A7DF91C06149900A819DD /* empty2.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 718A7DF81C06149900A819DD /* empty2.jwt */; };
+		718A7DFB1C06175200A819DD /* KeyUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718A7DFA1C06175200A819DD /* KeyUtilsTests.swift */; };
+		718A7E021C06277E00A819DD /* public.exponent in Resources */ = {isa = PBXBuildFile; fileRef = 718A7E001C06277E00A819DD /* public.exponent */; };
+		718A7E031C06277E00A819DD /* public.modulus in Resources */ = {isa = PBXBuildFile; fileRef = 718A7E011C06277E00A819DD /* public.modulus */; };
 		7190899F1C036F6F00A7A209 /* JSONWebToken.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 717ACFCE1BFB6842004E01D0 /* JSONWebToken.framework */; };
 		719089A51C0455B700A7A209 /* GenerateSample.py in Resources */ = {isa = PBXBuildFile; fileRef = 719089A41C0455B700A7A209 /* GenerateSample.py */; };
 		719089A91C045B9700A7A209 /* HS256.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 719089A61C045B9700A7A209 /* HS256.jwt */; };
@@ -116,6 +119,9 @@
 		717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_nbf_immature.jwt; sourceTree = "<group>"; };
 		717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_sub_format.jwt; sourceTree = "<group>"; };
 		718A7DF81C06149900A819DD /* empty2.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty2.jwt; sourceTree = "<group>"; };
+		718A7DFA1C06175200A819DD /* KeyUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyUtilsTests.swift; sourceTree = "<group>"; };
+		718A7E001C06277E00A819DD /* public.exponent */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = public.exponent; sourceTree = "<group>"; };
+		718A7E011C06277E00A819DD /* public.modulus */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = public.modulus; sourceTree = "<group>"; };
 		719089A41C0455B700A7A209 /* GenerateSample.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = GenerateSample.py; sourceTree = "<group>"; };
 		719089A61C045B9700A7A209 /* HS256.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HS256.jwt; sourceTree = "<group>"; };
 		719089A71C045B9700A7A209 /* HS384.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HS384.jwt; sourceTree = "<group>"; };
@@ -236,6 +242,7 @@
 				719454191C05FE990043493C /* ECDSATests.swift */,
 				719089CA1C04AD6B00A7A209 /* DecodeTests.swift */,
 				7194541B1C0600EA0043493C /* GenerateTests.swift */,
+				718A7DFA1C06175200A819DD /* KeyUtilsTests.swift */,
 			);
 			path = JSONWebTokenTests;
 			sourceTree = "<group>";
@@ -253,6 +260,8 @@
 		71EA69A61C035EB50081AF85 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
+				718A7E001C06277E00A819DD /* public.exponent */,
+				718A7E011C06277E00A819DD /* public.modulus */,
 				717FCFCA1C060CDA00C7DDEB /* invalid_aud_format.jwt */,
 				717FCFCB1C060CDA00C7DDEB /* invalid_exp_format.jwt */,
 				717FCFCC1C060CDA00C7DDEB /* invalid_expired.jwt */,
@@ -443,7 +452,9 @@
 				719089B51C04649700A7A209 /* RS512.jwt in Resources */,
 				719454101C05FBBB0043493C /* PS512.jwt in Resources */,
 				719089DE1C04BD2B00A7A209 /* invalid_missing_alg.jwt in Resources */,
+				718A7E021C06277E00A819DD /* public.exponent in Resources */,
 				7194540E1C05FBBB0043493C /* PS256.jwt in Resources */,
+				718A7E031C06277E00A819DD /* public.modulus in Resources */,
 				717FCFD71C060CDA00C7DDEB /* invalid_iss_format.jwt in Resources */,
 				719454161C05FE510043493C /* ES256.jwt in Resources */,
 				717FCFD61C060CDA00C7DDEB /* invalid_iat_format.jwt in Resources */,
@@ -479,6 +490,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				719089CB1C04AD6B00A7A209 /* DecodeTests.swift in Sources */,
+				718A7DFB1C06175200A819DD /* KeyUtilsTests.swift in Sources */,
 				719089C11C049F1400A7A209 /* ClaimTests.swift in Sources */,
 				719454121C05FBC90043493C /* RSASSA_PSSTests.swift in Sources */,
 				717ACFDE1BFB6842004E01D0 /* RSASSA_PKCS1Tests.swift in Sources */,

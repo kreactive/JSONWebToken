@@ -65,12 +65,16 @@ public extension RSAPKCS1Key {
             } else {
                 return try addKey(tag, data: keyData.dataByStrippingX509Header())
             }
-            }()
+        }()
         if let result = key {
             return RSAPKCS1Key(secKey : result)
         } else {
             throw KeyUtilError.BadKeyFormat
         }
+    }
+    public static func registerOrUpdateKey(modulus modulus: NSData, exponent : NSData, tag : String) throws -> RSAPKCS1Key {
+        let combinedData = NSData(modulus: modulus, exponent: exponent)
+        return try RSAPKCS1Key.registerOrUpdateKey(combinedData, tag : tag)
     }
     public static func registerOrUpdatePublicPEMKey(keyData : NSData, tag : String) throws -> RSAPKCS1Key {
         guard let stringValue = String(data: keyData, encoding: NSUTF8StringEncoding) else {
@@ -95,9 +99,9 @@ public extension RSAPKCS1Key {
                 return content?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
             }
             return nil
-            }() ?? stringValue
+        }() ?? stringValue
         
-        guard let decodedKeyData = NSData(base64EncodedString: base64Content, options:[]) else {
+        guard let decodedKeyData = NSData(base64EncodedString: base64Content, options:[.IgnoreUnknownCharacters]) else {
             throw KeyUtilError.NotBase64Readable
         }
         return try RSAPKCS1Key.registerOrUpdateKey(decodedKeyData, tag: tag)
@@ -133,7 +137,7 @@ private func getKey(tag: String) throws -> SecKey? {
         throw RSAPKCS1Key.Error.SecurityError(status)
     }
 }
-private func getKeyData(tag: String) throws -> NSData? {
+internal func getKeyData(tag: String) throws -> NSData? {
     
     var query = matchQueryWithTag(tag)
     query[String(kSecReturnData)] = kCFBooleanTrue as CFBoolean
@@ -153,7 +157,7 @@ private func getKeyData(tag: String) throws -> NSData? {
 private func updateKey(tag: String, data: NSData) throws {
     let query = matchQueryWithTag(tag)
     let status = SecItemUpdate(query, [String(kSecValueData): data])
-    if status != errSecSuccess {
+    guard status == errSecSuccess else {
         throw RSAPKCS1Key.Error.SecurityError(status)
     }
 }
