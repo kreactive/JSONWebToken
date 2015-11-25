@@ -11,7 +11,7 @@ public struct ClaimValidatorError : ErrorType {
     let message : String
 }
 public struct ClaimValidator<T> : JSONWebTokenValidatorType {
-    private var optional : Bool = false
+    private var isOptional : Bool = false
     private var validator : (T) -> ValidationResult = {_ in return .Success}
 
     let key : String
@@ -43,16 +43,16 @@ public struct ClaimValidator<T> : JSONWebTokenValidatorType {
     }
     
     
-    public var optionalValidator : ClaimValidator<T> {
+    public var optional : ClaimValidator<T> {
         var result = self
-        result.optional = true
+        result.isOptional = true
         return result
     }
     
     
     public func validateToken(token : JSONWebToken) -> ValidationResult {
         guard let initialValue = token.payload[self.key] else {
-            if self.optional {
+            if self.isOptional {
                 return .Success
             } else {
                 return .Failure(ClaimValidatorError(message: "missing value for claim with key \(self.key)"))

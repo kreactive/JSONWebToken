@@ -70,7 +70,7 @@ class ClaimTests : XCTestCase {
             let validation = validator.validateToken(jwt)
             XCTAssertFalse(validation.isValid)
             
-            let validatorOptional = IssuerValidator.optionalValidator & SubjectValidator.optionalValidator & JWTIdentifierValidator.optionalValidator & AudienceValidator.optionalValidator & ExpirationTimeValidator.optionalValidator & NotBeforeValidator.optionalValidator & IssuedAtValidator.optionalValidator
+            let validatorOptional = IssuerValidator.optional & SubjectValidator.optional & JWTIdentifierValidator.optional & AudienceValidator.optional & ExpirationTimeValidator.optional & NotBeforeValidator.optional & IssuedAtValidator.optional
             let validationOpt = validatorOptional.validateToken(jwt)
             XCTAssertTrue(validationOpt.isValid)
         }
@@ -87,54 +87,54 @@ class ClaimTests : XCTestCase {
     func testInvalidAudience() {
         let invalidFormat = ReadSampleWithName("invalid_aud_format")
         XCTAssertTrue(invalidFormat.payload.audience == [])
-        let validationFormat = AudienceValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = AudienceValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
     }
     func testInvalidExp() {
         let invalidFormat = ReadSampleWithName("invalid_exp_format")
         XCTAssertNil(invalidFormat.payload.expiration)
-        let validationFormat = ExpirationTimeValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = ExpirationTimeValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
         let expired = ReadSampleWithName("invalid_expired")
         XCTAssertNotNil(expired.payload.expiration)
-        let validationExpired = ExpirationTimeValidator.optionalValidator.validateToken(expired)
+        let validationExpired = ExpirationTimeValidator.optional.validateToken(expired)
         XCTAssertFalse(validationExpired.isValid)
     }
     func testInvalidIat() {
         let invalidFormat = ReadSampleWithName("invalid_iat_format")
         XCTAssertNil(invalidFormat.payload.issuedAt)
-        let validationFormat = IssuedAtValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = IssuedAtValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
     }
     func testInvalidIss() {
         let invalidFormat = ReadSampleWithName("invalid_iss_format")
         XCTAssertNil(invalidFormat.payload.issuer)
-        let validationFormat = IssuerValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = IssuerValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
     }
     func testInvalidJWTIdentifier() {
         let invalidFormat = ReadSampleWithName("invalid_jti_format")
         XCTAssertNil(invalidFormat.payload.jwtIdentifier)
-        let validationFormat = JWTIdentifierValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = JWTIdentifierValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
     }
     func testInvalidNbf() {
         let invalidFormat = ReadSampleWithName("invalid_nbf_format")
         XCTAssertNil(invalidFormat.payload.notBefore)
-        let validationFormat = NotBeforeValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = NotBeforeValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
         let expired = ReadSampleWithName("invalid_nbf_immature")
         XCTAssertNotNil(expired.payload.notBefore)
-        let validationExpired = NotBeforeValidator.optionalValidator.validateToken(expired)
+        let validationExpired = NotBeforeValidator.optional.validateToken(expired)
         XCTAssertFalse(validationExpired.isValid)
     }
     func testInvalidSub() {
         let invalidFormat = ReadSampleWithName("invalid_sub_format")
         XCTAssertNil(invalidFormat.payload.subject)
-        let validationFormat = SubjectValidator.optionalValidator.validateToken(invalidFormat)
+        let validationFormat = SubjectValidator.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
     }

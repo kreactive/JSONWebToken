@@ -136,7 +136,7 @@
 		719089B81C0477D500A7A209 /* RS512_2.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RS512_2.jwt; sourceTree = "<group>"; };
 		719089BC1C049E3B00A7A209 /* all_claim_valid_1.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = all_claim_valid_1.jwt; sourceTree = "<group>"; };
 		719089BE1C049EC400A7A209 /* all_claim_valid_2.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = all_claim_valid_2.jwt; sourceTree = "<group>"; };
-		719089C01C049F1400A7A209 /* ClaimTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClaimTests.swift; sourceTree = "<group>"; };
+		719089C01C049F1400A7A209 /* ClaimTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ClaimTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		719089C21C049FBE00A7A209 /* all_claim_valid_2_signed.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = all_claim_valid_2_signed.jwt; sourceTree = "<group>"; };
 		719089C41C04AA0100A7A209 /* empty.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.jwt; sourceTree = "<group>"; };
 		719089C61C04AD1500A7A209 /* invalid_structure_2.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_structure_2.jwt; sourceTree = "<group>"; };
