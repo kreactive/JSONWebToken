@@ -14,17 +14,17 @@ class ClaimTests : XCTestCase {
 
     func testValidateAllClaims() {
         let jwts = ["all_claim_valid_1","all_claim_valid_2"].map(ReadSampleWithName)
-        let validatorBase = IssuerValidator & SubjectValidator & JWTIdentifierValidator & AudienceValidator & ExpirationTimeValidator & NotBeforeValidator & IssuedAtValidator
+        let validatorBase = RegisteredClaimValidator.issuer & RegisteredClaimValidator.subject & RegisteredClaimValidator.jwtIdentifier & RegisteredClaimValidator.audience & RegisteredClaimValidator.expiration & RegisteredClaimValidator.notBefore & RegisteredClaimValidator.issuedAt
         
         jwts.forEach {
             let validation = validatorBase.validateToken($0)
             XCTAssertTrue(validation.isValid, "\(validation)")
         }
         
-        let validatorValues = IssuerValidator.withValidator {$0 == "kreactive"} &
-            SubjectValidator.withValidator {$0 == "antoine"} &
-            JWTIdentifierValidator.withValidator{$0 == "123456789"} &
-            AudienceValidator.withValidator {$0.contains("test-app")}
+        let validatorValues = RegisteredClaimValidator.issuer.withValidator {$0 == "kreactive"} &
+            RegisteredClaimValidator.subject.withValidator {$0 == "antoine"} &
+            RegisteredClaimValidator.jwtIdentifier.withValidator{$0 == "123456789"} &
+            RegisteredClaimValidator.audience.withValidator {$0.contains("test-app")}
         
         jwts.forEach {
             let validation = validatorValues.validateToken($0)
@@ -32,10 +32,10 @@ class ClaimTests : XCTestCase {
         }
     }
     func testValidateAllClaimsSigned() {
-        let validator = IssuerValidator.withValidator {$0 == "kreactive"} &
-            SubjectValidator.withValidator {$0 == "antoine"} &
-            JWTIdentifierValidator.withValidator{$0 == "123456789"} &
-            AudienceValidator.withValidator {$0.contains("test-app")} &
+        let validator = RegisteredClaimValidator.issuer.withValidator {$0 == "kreactive"} &
+            RegisteredClaimValidator.subject.withValidator {$0 == "antoine"} &
+            RegisteredClaimValidator.jwtIdentifier.withValidator{$0 == "123456789"} &
+            RegisteredClaimValidator.audience.withValidator {$0.contains("test-app")} &
             HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA256)
         
         let jwt = ReadSampleWithName("all_claim_valid_2_signed")
@@ -66,11 +66,11 @@ class ClaimTests : XCTestCase {
             XCTAssertNil(jwt.payload.notBefore)
             XCTAssertNil(jwt.payload.issuedAt)
             
-            let validator = IssuerValidator & SubjectValidator & JWTIdentifierValidator & AudienceValidator & ExpirationTimeValidator & NotBeforeValidator & IssuedAtValidator
+            let validator = RegisteredClaimValidator.issuer & RegisteredClaimValidator.subject & RegisteredClaimValidator.jwtIdentifier & RegisteredClaimValidator.audience & RegisteredClaimValidator.expiration & RegisteredClaimValidator.notBefore & RegisteredClaimValidator.issuedAt
             let validation = validator.validateToken(jwt)
             XCTAssertFalse(validation.isValid)
             
-            let validatorOptional = IssuerValidator.optional & SubjectValidator.optional & JWTIdentifierValidator.optional & AudienceValidator.optional & ExpirationTimeValidator.optional & NotBeforeValidator.optional & IssuedAtValidator.optional
+            let validatorOptional = RegisteredClaimValidator.issuer.optional & RegisteredClaimValidator.subject.optional & RegisteredClaimValidator.jwtIdentifier.optional & RegisteredClaimValidator.audience.optional & RegisteredClaimValidator.expiration.optional & RegisteredClaimValidator.notBefore.optional & RegisteredClaimValidator.issuedAt.optional
             let validationOpt = validatorOptional.validateToken(jwt)
             XCTAssertTrue(validationOpt.isValid)
         }
@@ -87,54 +87,54 @@ class ClaimTests : XCTestCase {
     func testInvalidAudience() {
         let invalidFormat = ReadSampleWithName("invalid_aud_format")
         XCTAssertTrue(invalidFormat.payload.audience == [])
-        let validationFormat = AudienceValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.audience.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
     }
     func testInvalidExp() {
         let invalidFormat = ReadSampleWithName("invalid_exp_format")
         XCTAssertNil(invalidFormat.payload.expiration)
-        let validationFormat = ExpirationTimeValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.expiration.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
         let expired = ReadSampleWithName("invalid_expired")
         XCTAssertNotNil(expired.payload.expiration)
-        let validationExpired = ExpirationTimeValidator.optional.validateToken(expired)
+        let validationExpired = RegisteredClaimValidator.expiration.optional.validateToken(expired)
         XCTAssertFalse(validationExpired.isValid)
     }
     func testInvalidIat() {
         let invalidFormat = ReadSampleWithName("invalid_iat_format")
         XCTAssertNil(invalidFormat.payload.issuedAt)
-        let validationFormat = IssuedAtValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.issuedAt.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
     }
     func testInvalidIss() {
         let invalidFormat = ReadSampleWithName("invalid_iss_format")
         XCTAssertNil(invalidFormat.payload.issuer)
-        let validationFormat = IssuerValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.issuer.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
     }
     func testInvalidJWTIdentifier() {
         let invalidFormat = ReadSampleWithName("invalid_jti_format")
         XCTAssertNil(invalidFormat.payload.jwtIdentifier)
-        let validationFormat = JWTIdentifierValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.jwtIdentifier.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
     }
     func testInvalidNbf() {
         let invalidFormat = ReadSampleWithName("invalid_nbf_format")
         XCTAssertNil(invalidFormat.payload.notBefore)
-        let validationFormat = NotBeforeValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.notBefore.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
         let expired = ReadSampleWithName("invalid_nbf_immature")
         XCTAssertNotNil(expired.payload.notBefore)
-        let validationExpired = NotBeforeValidator.optional.validateToken(expired)
+        let validationExpired = RegisteredClaimValidator.notBefore.optional.validateToken(expired)
         XCTAssertFalse(validationExpired.isValid)
     }
     func testInvalidSub() {
         let invalidFormat = ReadSampleWithName("invalid_sub_format")
         XCTAssertNil(invalidFormat.payload.subject)
-        let validationFormat = SubjectValidator.optional.validateToken(invalidFormat)
+        let validationFormat = RegisteredClaimValidator.subject.optional.validateToken(invalidFormat)
         XCTAssertFalse(validationFormat.isValid)
         
     }

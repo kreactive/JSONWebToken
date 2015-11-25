@@ -73,7 +73,7 @@ public struct JSONWebToken {
         }
         public var issuer : String? {
             get {
-                return (try? self[.Issuer].map(IssuerValidator.transform)) ?? nil
+                return (try? self[.Issuer].map(RegisteredClaimValidator.issuer.transform)) ?? nil
             }
             set {
                 self[.Issuer] = newValue
@@ -81,7 +81,7 @@ public struct JSONWebToken {
         }
         public var subject : String? {
             get {
-                return (try? self[.Subject].map(SubjectValidator.transform)) ?? nil
+                return (try? self[.Subject].map(RegisteredClaimValidator.subject.transform)) ?? nil
             }
             set {
                 self[.Subject] = newValue
@@ -89,7 +89,7 @@ public struct JSONWebToken {
         }
         public var audience : [String] {
             get {
-                return (try? self[.Audience].map(AudienceValidator.transform) ?? []) ?? []
+                return (try? self[.Audience].map(RegisteredClaimValidator.audience.transform) ?? []) ?? []
             }
             set {
                 switch newValue.count {
@@ -107,7 +107,7 @@ public struct JSONWebToken {
         }
         public var expiration : NSDate? {
             get {
-                return (try? self[.ExpirationTime].map(ExpirationTimeValidator.transform)) ?? nil
+                return (try? self[.ExpirationTime].map(RegisteredClaimValidator.expiration.transform)) ?? nil
             }
             set {
                 self[.ExpirationTime] = Payload.jsonClaimValueFromDate(newValue)
@@ -116,7 +116,7 @@ public struct JSONWebToken {
         
         public var notBefore : NSDate? {
             get {
-                return (try? self[.NotBefore].map(NotBeforeValidator.transform)) ?? nil
+                return (try? self[.NotBefore].map(RegisteredClaimValidator.notBefore.transform)) ?? nil
             }
             set {
                 self[.NotBefore] = Payload.jsonClaimValueFromDate(newValue)
@@ -125,7 +125,7 @@ public struct JSONWebToken {
         
         public var issuedAt : NSDate? {
             get {
-                return (try? self[.IssuedAt].map(IssuedAtValidator.transform)) ?? nil
+                return (try? self[.IssuedAt].map(RegisteredClaimValidator.issuedAt.transform)) ?? nil
             }
             set {
                 self[.IssuedAt] = Payload.jsonClaimValueFromDate(newValue)
@@ -133,7 +133,7 @@ public struct JSONWebToken {
         }
         public var jwtIdentifier : String? {
             get {
-                return (try? self[.JWTIdentifier].map(JWTIdentifierValidator.transform)) ?? nil
+                return (try? self[.JWTIdentifier].map(RegisteredClaimValidator.jwtIdentifier.transform)) ?? nil
             }
             set {
                 self[.JWTIdentifier] = newValue
