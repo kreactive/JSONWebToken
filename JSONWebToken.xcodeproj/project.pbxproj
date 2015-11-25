@@ -19,6 +19,15 @@
 		717ACFFC1BFC827E004E01D0 /* NSData+HMAC.h in Headers */ = {isa = PBXBuildFile; fileRef = 717ACFFA1BFC827E004E01D0 /* NSData+HMAC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717ACFFD1BFC827E004E01D0 /* NSData+HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */; };
 		717ACFFF1BFC8393004E01D0 /* SignatureAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFFE1BFC8393004E01D0 /* SignatureAlgorithm.swift */; };
+		717FCFD31C060CDA00C7DDEB /* invalid_aud_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCA1C060CDA00C7DDEB /* invalid_aud_format.jwt */; };
+		717FCFD41C060CDA00C7DDEB /* invalid_exp_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCB1C060CDA00C7DDEB /* invalid_exp_format.jwt */; };
+		717FCFD51C060CDA00C7DDEB /* invalid_expired.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCC1C060CDA00C7DDEB /* invalid_expired.jwt */; };
+		717FCFD61C060CDA00C7DDEB /* invalid_iat_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCD1C060CDA00C7DDEB /* invalid_iat_format.jwt */; };
+		717FCFD71C060CDA00C7DDEB /* invalid_iss_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCE1C060CDA00C7DDEB /* invalid_iss_format.jwt */; };
+		717FCFD81C060CDA00C7DDEB /* invalid_jti_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCF1C060CDA00C7DDEB /* invalid_jti_format.jwt */; };
+		717FCFD91C060CDA00C7DDEB /* invalid_nbf_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD01C060CDA00C7DDEB /* invalid_nbf_format.jwt */; };
+		717FCFDA1C060CDA00C7DDEB /* invalid_nbf_immature.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */; };
+		717FCFDB1C060CDA00C7DDEB /* invalid_sub_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */; };
 		7190899C1C036DB700A7A209 /* TEstesteste.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7190899B1C036DB700A7A209 /* TEstesteste.swift */; };
 		7190899F1C036F6F00A7A209 /* JSONWebToken.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 717ACFCE1BFB6842004E01D0 /* JSONWebToken.framework */; };
 		719089A51C0455B700A7A209 /* GenerateSample.py in Resources */ = {isa = PBXBuildFile; fileRef = 719089A41C0455B700A7A209 /* GenerateSample.py */; };
@@ -97,6 +106,15 @@
 		717ACFFA1BFC827E004E01D0 /* NSData+HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+HMAC.h"; sourceTree = "<group>"; };
 		717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+HMAC.m"; sourceTree = "<group>"; };
 		717ACFFE1BFC8393004E01D0 /* SignatureAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureAlgorithm.swift; sourceTree = "<group>"; };
+		717FCFCA1C060CDA00C7DDEB /* invalid_aud_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_aud_format.jwt; sourceTree = "<group>"; };
+		717FCFCB1C060CDA00C7DDEB /* invalid_exp_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_exp_format.jwt; sourceTree = "<group>"; };
+		717FCFCC1C060CDA00C7DDEB /* invalid_expired.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_expired.jwt; sourceTree = "<group>"; };
+		717FCFCD1C060CDA00C7DDEB /* invalid_iat_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_iat_format.jwt; sourceTree = "<group>"; };
+		717FCFCE1C060CDA00C7DDEB /* invalid_iss_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_iss_format.jwt; sourceTree = "<group>"; };
+		717FCFCF1C060CDA00C7DDEB /* invalid_jti_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_jti_format.jwt; sourceTree = "<group>"; };
+		717FCFD01C060CDA00C7DDEB /* invalid_nbf_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_nbf_format.jwt; sourceTree = "<group>"; };
+		717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_nbf_immature.jwt; sourceTree = "<group>"; };
+		717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_sub_format.jwt; sourceTree = "<group>"; };
 		7190899B1C036DB700A7A209 /* TEstesteste.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TEstesteste.swift; sourceTree = "<group>"; };
 		719089A41C0455B700A7A209 /* GenerateSample.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = GenerateSample.py; sourceTree = "<group>"; };
 		719089A61C045B9700A7A209 /* HS256.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HS256.jwt; sourceTree = "<group>"; };
@@ -236,6 +254,15 @@
 		71EA69A61C035EB50081AF85 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
+				717FCFCA1C060CDA00C7DDEB /* invalid_aud_format.jwt */,
+				717FCFCB1C060CDA00C7DDEB /* invalid_exp_format.jwt */,
+				717FCFCC1C060CDA00C7DDEB /* invalid_expired.jwt */,
+				717FCFCD1C060CDA00C7DDEB /* invalid_iat_format.jwt */,
+				717FCFCE1C060CDA00C7DDEB /* invalid_iss_format.jwt */,
+				717FCFCF1C060CDA00C7DDEB /* invalid_jti_format.jwt */,
+				717FCFD01C060CDA00C7DDEB /* invalid_nbf_format.jwt */,
+				717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */,
+				717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */,
 				719454131C05FE510043493C /* ES256.jwt */,
 				719454141C05FE510043493C /* ES384.jwt */,
 				719454151C05FE510043493C /* ES512.jwt */,
@@ -378,13 +405,18 @@
 			files = (
 				719089BF1C049EC400A7A209 /* all_claim_valid_2.jwt in Resources */,
 				719089D91C04B86900A7A209 /* invalid_header_json_structure.jwt in Resources */,
+				717FCFD81C060CDA00C7DDEB /* invalid_jti_format.jwt in Resources */,
 				719089B41C04649700A7A209 /* RS384.jwt in Resources */,
+				717FCFD31C060CDA00C7DDEB /* invalid_aud_format.jwt in Resources */,
 				719089AA1C045B9700A7A209 /* HS384.jwt in Resources */,
 				719454171C05FE510043493C /* ES384.jwt in Resources */,
 				719089C91C04AD1500A7A209 /* invalid_structure.jwt in Resources */,
 				719089B31C04649700A7A209 /* RS256.jwt in Resources */,
+				717FCFDB1C060CDA00C7DDEB /* invalid_sub_format.jwt in Resources */,
 				719089CF1C04AFED00A7A209 /* invalid_header_base64.jwt in Resources */,
+				717FCFD91C060CDA00C7DDEB /* invalid_nbf_format.jwt in Resources */,
 				719089D41C04B6B900A7A209 /* invalid_header_json.jwt in Resources */,
+				717FCFD51C060CDA00C7DDEB /* invalid_expired.jwt in Resources */,
 				719089A91C045B9700A7A209 /* HS256.jwt in Resources */,
 				719089BB1C0477D500A7A209 /* RS512_2.jwt in Resources */,
 				719089BD1C049E3B00A7A209 /* all_claim_valid_1.jwt in Resources */,
@@ -402,14 +434,18 @@
 				719089DF1C04BD2B00A7A209 /* invalid_alg.jwt in Resources */,
 				719089D11C04AFED00A7A209 /* invalid_signature_base64.jwt in Resources */,
 				7194540A1C05F6AC0043493C /* identity.p12 in Resources */,
+				717FCFDA1C060CDA00C7DDEB /* invalid_nbf_immature.jwt in Resources */,
 				719089B11C04649700A7A209 /* private.pem in Resources */,
+				717FCFD41C060CDA00C7DDEB /* invalid_exp_format.jwt in Resources */,
 				719089D01C04AFED00A7A209 /* invalid_payload_base64.jwt in Resources */,
 				719454181C05FE510043493C /* ES512.jwt in Resources */,
 				719089B51C04649700A7A209 /* RS512.jwt in Resources */,
 				719454101C05FBBB0043493C /* PS512.jwt in Resources */,
 				719089DE1C04BD2B00A7A209 /* invalid_missing_alg.jwt in Resources */,
 				7194540E1C05FBBB0043493C /* PS256.jwt in Resources */,
+				717FCFD71C060CDA00C7DDEB /* invalid_iss_format.jwt in Resources */,
 				719454161C05FE510043493C /* ES256.jwt in Resources */,
+				717FCFD61C060CDA00C7DDEB /* invalid_iat_format.jwt in Resources */,
 				719089D81C04B86900A7A209 /* invalid_payload_json_structure.jwt in Resources */,
 				719089BA1C0477D500A7A209 /* RS384_2.jwt in Resources */,
 			);

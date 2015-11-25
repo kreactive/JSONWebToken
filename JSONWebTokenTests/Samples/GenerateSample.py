@@ -96,3 +96,15 @@ all_claim_valid_2_signed = {
 
 writeToSampleDirectory(jwt.encode(all_claim_valid_2_signed, cryptoSymSecret ,algorithm='HS256'),'all_claim_valid_2_signed.jwt')
 writeToSampleDirectory(jwt.encode({}, None ,algorithm='none'),'empty.jwt')
+writeToSampleDirectory(jwt.encode({'exp' : '11/11/2025'}, None ,algorithm='none'),'invalid_exp_format.jwt')
+writeToSampleDirectory(jwt.encode({'exp' : 1448465478}, None ,algorithm='none'),'invalid_expired.jwt')
+
+writeToSampleDirectory(jwt.encode({'nbf' : '11/11/2025'}, None ,algorithm='none'),'invalid_nbf_format.jwt')
+writeToSampleDirectory(jwt.encode({'nbf' : 1762819200}, None ,algorithm='none'),'invalid_nbf_immature.jwt')
+
+writeToSampleDirectory(jwt.encode({'iat' : '11/11/2025'}, None ,algorithm='none'),'invalid_iat_format.jwt')
+writeToSampleDirectory(jwt.encode({'iss' : 1762819200 }, None ,algorithm='none'),'invalid_iss_format.jwt')
+writeToSampleDirectory(jwt.encode({'sub' : 1762819200 }, None ,algorithm='none'),'invalid_sub_format.jwt')
+writeToSampleDirectory(jwt.encode({'aud' : 1762819200 }, None ,algorithm='none'),'invalid_aud_format.jwt')
+writeToSampleDirectory(jwt.encode({'jti' : 1762819200 }, None ,algorithm='none'),'invalid_jti_format.jwt')
+
