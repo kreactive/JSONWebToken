@@ -23,10 +23,9 @@ extension SignatureValidator {
         guard let input = (token.base64Parts.header+"."+token.base64Parts.payload).dataUsingEncoding(NSUTF8StringEncoding) else {
             return .Failure(SignatureValidatorError.BadInputData)
         }
-        if self.verify(input, signature: token.decodedDataForPart(.Signature)) {
-            return .Success
-        } else {
+        guard self.verify(input, signature: token.decodedDataForPart(.Signature))  else {
             return .Failure(SignatureValidatorError.SignatureMismatch)
         }
+        return .Success
     }
 }

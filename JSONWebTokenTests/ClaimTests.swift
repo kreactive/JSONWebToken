@@ -56,22 +56,25 @@ class ClaimTests : XCTestCase {
         }
     }
     func testValidateClaimsEmpty() {
-        let jwt = ReadSampleWithName("empty")
-        XCTAssertTrue(jwt.payload.audience == [])
-        XCTAssertNil(jwt.payload.issuer)
-        XCTAssertNil(jwt.payload.subject)
-        XCTAssertNil(jwt.payload.jwtIdentifier)
-        XCTAssertNil(jwt.payload.expiration)
-        XCTAssertNil(jwt.payload.notBefore)
-        XCTAssertNil(jwt.payload.issuedAt)
-        
-        let validator = IssuerValidator & SubjectValidator & JWTIdentifierValidator & AudienceValidator & ExpirationTimeValidator & NotBeforeValidator & IssuedAtValidator
-        let validation = validator.validateToken(jwt)
-        XCTAssertFalse(validation.isValid)
-        
-        let validatorOptional = IssuerValidator.optionalValidator & SubjectValidator.optionalValidator & JWTIdentifierValidator.optionalValidator & AudienceValidator.optionalValidator & ExpirationTimeValidator.optionalValidator & NotBeforeValidator.optionalValidator & IssuedAtValidator.optionalValidator
-        let validationOpt = validatorOptional.validateToken(jwt)
-        XCTAssertTrue(validationOpt.isValid)
+        let tokens = ["empty","empty2"].map(ReadSampleWithName)
+        tokens.forEach { jwt in
+            XCTAssertTrue(jwt.payload.audience == [])
+            XCTAssertNil(jwt.payload.issuer)
+            XCTAssertNil(jwt.payload.subject)
+            XCTAssertNil(jwt.payload.jwtIdentifier)
+            XCTAssertNil(jwt.payload.expiration)
+            XCTAssertNil(jwt.payload.notBefore)
+            XCTAssertNil(jwt.payload.issuedAt)
+            
+            let validator = IssuerValidator & SubjectValidator & JWTIdentifierValidator & AudienceValidator & ExpirationTimeValidator & NotBeforeValidator & IssuedAtValidator
+            let validation = validator.validateToken(jwt)
+            XCTAssertFalse(validation.isValid)
+            
+            let validatorOptional = IssuerValidator.optionalValidator & SubjectValidator.optionalValidator & JWTIdentifierValidator.optionalValidator & AudienceValidator.optionalValidator & ExpirationTimeValidator.optionalValidator & NotBeforeValidator.optionalValidator & IssuedAtValidator.optionalValidator
+            let validationOpt = validatorOptional.validateToken(jwt)
+            XCTAssertTrue(validationOpt.isValid)
+        }
+
     }
     func testOrCombine() {
         let jwt = ReadSampleWithName("RS512")

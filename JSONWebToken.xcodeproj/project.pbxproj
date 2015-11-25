@@ -28,7 +28,7 @@
 		717FCFD91C060CDA00C7DDEB /* invalid_nbf_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD01C060CDA00C7DDEB /* invalid_nbf_format.jwt */; };
 		717FCFDA1C060CDA00C7DDEB /* invalid_nbf_immature.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */; };
 		717FCFDB1C060CDA00C7DDEB /* invalid_sub_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */; };
-		7190899C1C036DB700A7A209 /* TEstesteste.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7190899B1C036DB700A7A209 /* TEstesteste.swift */; };
+		718A7DF91C06149900A819DD /* empty2.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 718A7DF81C06149900A819DD /* empty2.jwt */; };
 		7190899F1C036F6F00A7A209 /* JSONWebToken.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 717ACFCE1BFB6842004E01D0 /* JSONWebToken.framework */; };
 		719089A51C0455B700A7A209 /* GenerateSample.py in Resources */ = {isa = PBXBuildFile; fileRef = 719089A41C0455B700A7A209 /* GenerateSample.py */; };
 		719089A91C045B9700A7A209 /* HS256.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 719089A61C045B9700A7A209 /* HS256.jwt */; };
@@ -115,7 +115,7 @@
 		717FCFD01C060CDA00C7DDEB /* invalid_nbf_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_nbf_format.jwt; sourceTree = "<group>"; };
 		717FCFD11C060CDA00C7DDEB /* invalid_nbf_immature.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_nbf_immature.jwt; sourceTree = "<group>"; };
 		717FCFD21C060CDA00C7DDEB /* invalid_sub_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_sub_format.jwt; sourceTree = "<group>"; };
-		7190899B1C036DB700A7A209 /* TEstesteste.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TEstesteste.swift; sourceTree = "<group>"; };
+		718A7DF81C06149900A819DD /* empty2.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty2.jwt; sourceTree = "<group>"; };
 		719089A41C0455B700A7A209 /* GenerateSample.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = GenerateSample.py; sourceTree = "<group>"; };
 		719089A61C045B9700A7A209 /* HS256.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HS256.jwt; sourceTree = "<group>"; };
 		719089A71C045B9700A7A209 /* HS384.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HS384.jwt; sourceTree = "<group>"; };
@@ -231,7 +231,6 @@
 				717ACFDD1BFB6842004E01D0 /* RSASSA_PKCS1Tests.swift */,
 				7148BE9C1BFE2FA400CD17E7 /* TestUtils.swift */,
 				717ACFDF1BFB6842004E01D0 /* Info.plist */,
-				7190899B1C036DB700A7A209 /* TEstesteste.swift */,
 				719089C01C049F1400A7A209 /* ClaimTests.swift */,
 				719454111C05FBC90043493C /* RSASSA_PSSTests.swift */,
 				719454191C05FE990043493C /* ECDSATests.swift */,
@@ -297,6 +296,7 @@
 				719089A61C045B9700A7A209 /* HS256.jwt */,
 				719089A71C045B9700A7A209 /* HS384.jwt */,
 				719089A81C045B9700A7A209 /* HS512.jwt */,
+				718A7DF81C06149900A819DD /* empty2.jwt */,
 				719089C41C04AA0100A7A209 /* empty.jwt */,
 				719089A41C0455B700A7A209 /* GenerateSample.py */,
 			);
@@ -427,6 +427,7 @@
 				719089E11C04BD2B00A7A209 /* invalid_typ.jwt in Resources */,
 				719089C81C04AD1500A7A209 /* invalid_structure_2.jwt in Resources */,
 				719089A51C0455B700A7A209 /* GenerateSample.py in Resources */,
+				718A7DF91C06149900A819DD /* empty2.jwt in Resources */,
 				719089C51C04AA0100A7A209 /* empty.jwt in Resources */,
 				719089E01C04BD2B00A7A209 /* valid_missing_typ.jwt in Resources */,
 				719089AB1C045B9700A7A209 /* HS512.jwt in Resources */,
@@ -470,7 +471,6 @@
 				717ACFF91BFC81CB004E01D0 /* HMAC.swift in Sources */,
 				71EA699C1C0320720081AF85 /* TokenValidator.swift in Sources */,
 				717ACFF71BFC7BB8004E01D0 /* SignatureValidator.swift in Sources */,
-				7190899C1C036DB700A7A209 /* TEstesteste.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,6 +592,7 @@
 		717ACFE31BFB6842004E01D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -599,6 +600,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = JSONWebToken/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = kreactive.JSONWebToken;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -610,6 +612,7 @@
 		717ACFE41BFB6842004E01D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -617,6 +620,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = JSONWebToken/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = kreactive.JSONWebToken;
 				PRODUCT_NAME = "$(TARGET_NAME)";

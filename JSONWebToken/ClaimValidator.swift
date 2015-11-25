@@ -29,11 +29,10 @@ public struct ClaimValidator<T> : JSONWebTokenValidatorType {
         var result = self
         result.validator = { input in
             let validationResult = self.validator(input)
-            if case ValidationResult.Success = validationResult {
-                return validator(input)
-            } else {
+            guard case ValidationResult.Success = validationResult else {
                 return validationResult
             }
+            return validator(input)
         }
         return result
     }
