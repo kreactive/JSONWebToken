@@ -28,10 +28,10 @@ public enum SignatureAlgorithm {
     }
     
     case None
-    case HMAC(HashFunction) // HMAC
-    case RSASSA_PKCS1(HashFunction) // RSASSA-PKCS1-v1_5
-    case ECDSA(HashFunction) // ECDSA
-    case RSASSA_PSS(HashFunction) //RSASSA-PSS
+    case HMAC(HashFunction) // HMAC -> HSXXX
+    case RSASSA_PKCS1(HashFunction) // RSASSA-PKCS1-v1_5 -> RSXXX
+    case ECDSA(HashFunction) // ECDSA -> ESXXX
+    case RSASSA_PSS(HashFunction) //RSASSA-PSS -> PSXXX
     
     public init(name : String) throws {
         guard name.characters.count > 0 else {throw JSONWebToken.Error.InvalidSignatureAlgorithm(name)}

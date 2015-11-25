@@ -101,6 +101,43 @@ class DecodeTests : XCTestCase {
         } catch {
             XCTFail("should be a .InvalidJSON(.Payload) error \(error)")
         }
+    }
+    func testHeaderContent() {
+        let missingAlgRawJWT = ReadRawSampleWithName("invalid_missing_alg")
+        do {
+            let _ = try JSONWebToken(string : missingAlgRawJWT)
+            XCTFail("should fail")
+        } catch JSONWebToken.Error.MissingSignatureAlgorithm {
+            
+        } catch {
+            XCTFail("should be a .MissingSignatureAlgorithm error \(error)")
+        }
         
+        let invalidAlgRawJWT = ReadRawSampleWithName("invalid_alg")
+        do {
+            let _ = try JSONWebToken(string : invalidAlgRawJWT)
+            XCTFail("should fail")
+        } catch JSONWebToken.Error.InvalidSignatureAlgorithm("RS9000") {
+            
+        } catch {
+            XCTFail("should be a .InvalidSignatureAlgorithm error \(error)")
+        }
+        
+        let missingTyp = ReadRawSampleWithName("valid_missing_typ")
+        do {
+            let _ = try JSONWebToken(string : missingTyp)
+        } catch {
+            XCTFail("should not fail \(error)")
+        }
+        
+        let invalidTyp = ReadRawSampleWithName("invalid_typ")
+        do {
+            let _ = try JSONWebToken(string : invalidTyp)
+            XCTFail("should fail")
+        } catch JSONWebToken.Error.TypeIsNotAJSONWebToken {
+            
+        } catch {
+            XCTFail("should be a .TypeIsNotAJSONWebToken error \(error)")
+        }
     }
 }

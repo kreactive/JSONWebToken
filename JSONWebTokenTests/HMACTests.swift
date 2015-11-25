@@ -57,5 +57,38 @@ class HMACTests : XCTestCase {
         XCTAssertFalse(result.isValid)
     }
     
-    
+    func testHS256Sign() {
+        let signer = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA256)
+        do {
+            let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
+            let verifier = signer
+            let result = verifier.validateToken(jwt)
+            XCTAssertTrue(result.isValid)
+        } catch {
+            XCTFail("sign failed \(error)")
+        }
+
+    }
+    func testHS384Sign() {
+        let signer = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA384)
+        do {
+            let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
+            let verifier = signer
+            let result = verifier.validateToken(jwt)
+            XCTAssertTrue(result.isValid)
+        } catch {
+            XCTFail("sign failed \(error)")
+        }
+    }
+    func testHS512Sign() {
+        let signer = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
+        do {
+            let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
+            let verifier = signer
+            let result = verifier.validateToken(jwt)
+            XCTAssertTrue(result.isValid)
+        } catch {
+            XCTFail("sign failed \(error)")
+        }
+    }
 }

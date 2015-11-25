@@ -43,7 +43,7 @@ public struct JSONWebToken {
         public init() {
             jsonPayload = Dictionary()
         }
-        subscript(key : String) -> AnyObject? {
+        public subscript(key : String) -> AnyObject? {
             get {
                 let result = jsonPayload[key]
                 switch result {

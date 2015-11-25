@@ -42,65 +42,75 @@
 import Foundation
 import Security
 
-enum PEMKeyError : ErrorType {
-    case NotStringReadable
-    case MissingPEMHeader
-    case MissingPEMFooter
-    case NoContent
 
-}
-internal func SecKeyCreate(pemKey keyData: NSData, tag : String) throws -> SecKey {
-    guard let stringValue = String(data: keyData, encoding: NSUTF8StringEncoding) else {
-        throw PEMKeyError.NotStringReadable
-    }
-    //remove ----BEGIN and ----END
-    let scanner = NSScanner(string: stringValue)
-    guard scanner.scanString("-----BEGIN", intoString: nil) else {
-        throw PEMKeyError.MissingPEMHeader
-    }
-    scanner.scanUpToString("KEY-----", intoString: nil)
-    guard scanner.scanString("KEY-----", intoString: nil) else {
-        throw PEMKeyError.MissingPEMHeader
+
+//these methods use a keychain api side effect to create public key from raw data
+public extension RSAPKCS1Key {
+    
+    enum KeyUtilError : ErrorType {
+        case NotStringReadable
+        case BadPEMArmor
+        case NotBase64Readable
+        case BadKeyFormat
     }
     
-    var content : NSString? = nil
-    scanner.scanUpToString("-----END", intoString: &content)
-    guard scanner.scanString("-----END", intoString: nil) else {
-        throw PEMKeyError.MissingPEMFooter
-    }
-    guard let base64Content = content?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) else {
-        throw PEMKeyError.NoContent
-    }
-    guard let keyData = NSData(base64EncodedString: base64Content, options: [.IgnoreUnknownCharacters]) else {
-        throw PEMKeyError.NoContent
-    }
-    return try SecKeyCreate(keyData: keyData, tag: tag)
-    
-}
-// these functions use Keychain library side effect to create a SecKeyRef from key data
-internal func SecKeyCreate(keyData keyData: NSData, tag : String) throws -> SecKey {
-    let key : SecKey? = try {
-        if let existingData = try getKeyData(tag) {
-            let newData = keyData.dataByStrippingX509Header()
-            if !existingData.isEqualToData(newData) {
-                try updateKey(tag, data: newData)
+    public static func registerOrUpdateKey(keyData : NSData, tag : String) throws -> RSAPKCS1Key {
+        let key : SecKey? = try {
+            if let existingData = try getKeyData(tag) {
+                let newData = keyData.dataByStrippingX509Header()
+                if !existingData.isEqualToData(newData) {
+                    try updateKey(tag, data: newData)
+                }
+                return try getKey(tag)
+            } else {
+                return try addKey(tag, data: keyData.dataByStrippingX509Header())
             }
-            return try getKey(tag)
+            }()
+        if let result = key {
+            return RSAPKCS1Key(secKey : result)
         } else {
-            return try addKey(tag, data: keyData.dataByStrippingX509Header())
+            throw KeyUtilError.BadKeyFormat
         }
-    }()
-    if let result = key {
-        return result
-    } else {
-        throw SignatureKeyError.SecurityError(errSecItemNotFound)
+    }
+    public static func registerOrUpdatePublicPEMKey(keyData : NSData, tag : String) throws -> RSAPKCS1Key {
+        guard let stringValue = String(data: keyData, encoding: NSUTF8StringEncoding) else {
+            throw KeyUtilError.NotStringReadable
+        }
+        
+        let base64Content : String = try {
+            //remove ----BEGIN and ----END
+            let scanner = NSScanner(string: stringValue)
+            scanner.charactersToBeSkipped = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+            if scanner.scanString("-----BEGIN", intoString: nil) {
+                scanner.scanUpToString("KEY-----", intoString: nil)
+                guard scanner.scanString("KEY-----", intoString: nil) else {
+                    throw KeyUtilError.BadPEMArmor
+                }
+                
+                var content : NSString? = nil
+                scanner.scanUpToString("-----END", intoString: &content)
+                guard scanner.scanString("-----END", intoString: nil) else {
+                    throw KeyUtilError.BadPEMArmor
+                }
+                return content?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            }
+            return nil
+            }() ?? stringValue
+        
+        guard let decodedKeyData = NSData(base64EncodedString: base64Content, options:[]) else {
+            throw KeyUtilError.NotBase64Readable
+        }
+        return try RSAPKCS1Key.registerOrUpdateKey(decodedKeyData, tag: tag)
+    }
+    static func registeredKeyWithTag(tag : String) -> RSAPKCS1Key? {
+        return ((try? getKey(tag)) ?? nil).map(RSAPKCS1Key.init)
+    }
+    static func removeKeyWithTag(tag : String) {
+        do {
+            try deleteKey(tag)
+        } catch {}
     }
 }
-internal func SecKeyCreate(keyModulus keyModulus : NSData, keyExponent: NSData,tag: String) throws -> SecKey  {
-    let combinedData = NSData(modulus: keyModulus, exponent: keyExponent)
-    return try SecKeyCreate(keyData : combinedData, tag : tag)
-}
-
 
 private func getKey(tag: String) throws -> SecKey? {
     var keyRef: AnyObject?
@@ -120,7 +130,7 @@ private func getKey(tag: String) throws -> SecKey? {
     case errSecItemNotFound:
         return nil
     default:
-        throw SignatureKeyError.SecurityError(status)
+        throw RSAPKCS1Key.Error.SecurityError(status)
     }
 }
 private func getKeyData(tag: String) throws -> NSData? {
@@ -137,14 +147,14 @@ private func getKeyData(tag: String) throws -> NSData? {
     case errSecItemNotFound:
         return nil
     default:
-        throw SignatureKeyError.SecurityError(status)
+        throw RSAPKCS1Key.Error.SecurityError(status)
     }
 }
 private func updateKey(tag: String, data: NSData) throws {
     let query = matchQueryWithTag(tag)
     let status = SecItemUpdate(query, [String(kSecValueData): data])
     if status != errSecSuccess {
-        throw SignatureKeyError.SecurityError(status)
+        throw RSAPKCS1Key.Error.SecurityError(status)
     }
 }
 
@@ -152,7 +162,7 @@ private func deleteKey(tag: String) throws {
     let query = matchQueryWithTag(tag)
     let status = SecItemDelete(query)
     if status != errSecSuccess {
-        throw SignatureKeyError.SecurityError(status)
+        throw RSAPKCS1Key.Error.SecurityError(status)
     }
 }
 private func matchQueryWithTag(tag : String) -> Dictionary<String, AnyObject> {
@@ -177,7 +187,7 @@ private func addKey(tag: String, data: NSData) throws -> SecKeyRef? {
     if status == noErr || status == errSecDuplicateItem {
         return try getKey(tag)
     }
-    throw SignatureKeyError.SecurityError(status)
+    throw RSAPKCS1Key.Error.SecurityError(status)
 }
 
 ///

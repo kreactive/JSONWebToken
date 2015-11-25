@@ -17,14 +17,24 @@ func ReadSampleWithName(name : String) -> JSONWebToken {
     return try! JSONWebToken(string : ReadRawSampleWithName(name))
 }
 
-var SamplePublicKey : SignatureKey = {
-    let path = NSBundle(forClass: HMACTests.self).pathForResource("public", ofType: "pem")!
-    let data = NSData(contentsOfFile : path)!
-    return try! SignatureKey(pemKey: data, tag : "testPublicKey")
+var SamplePublicKey : RSAPKCS1Key = {
+    return SampleIdentity.publicKey
+
 }()
 
-var SamplePrivateKey : SignatureKey = {
-    let path = NSBundle(forClass: HMACTests.self).pathForResource("private", ofType: "pem")!
-    let data = NSData(contentsOfFile : path)!
-    return try! SignatureKey(pemKey: data, tag : "testPrivateKey")
+let SamplePrivateKey : RSAPKCS1Key = {
+    return SampleIdentity.privateKey
+}()
+
+let SampleIdentity : (publicKey : RSAPKCS1Key,privateKey : RSAPKCS1Key) = {
+    let path = NSBundle(forClass: HMACTests.self).pathForResource("identity", ofType: "p12")!
+    let p12Data = NSData(contentsOfFile : path)!
+    return try! RSAPKCS1Key.keysFromPkcs12Identity(p12Data, passphrase : "1234")
+}()
+
+let SamplePayload : JSONWebToken.Payload = {
+    var payload = JSONWebToken.Payload()
+    payload.issuer = "1234567890"
+    payload["name"] = "John Doe"
+    return payload
 }()

@@ -7,4 +7,5 @@
 
 import Foundation
 
-
+func test(jwt : JSONWebToken) {
+}

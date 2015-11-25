@@ -19,11 +19,71 @@ private func paddingForHashFunction(f : SignatureAlgorithm.HashFunction) -> SecP
     }
 }
 
-public struct RSASSA_PKCS1Verifier : SignatureValidator {
-    let hashFunction : SignatureAlgorithm.HashFunction
-    let key : SignatureKey
+
+
+public struct RSAPKCS1Key {
+    enum Error : ErrorType {
+        case SecurityError(OSStatus)
+        case PublicKeyNotFoundInCertificate
+        case CannotCreateCertificateFromData
+        case InvalidP12ImportResult
+        case InvalidP12NoIdentityFound
+
+    }
+    let value : SecKeyRef
+        
+    public init(secKey :SecKey) {
+        self.value = secKey
+    }
+    public init(secCertificate cert: SecCertificate) throws {
+        var trust : SecTrust? = nil
+        let result = SecTrustCreateWithCertificates(cert, nil, &trust)
+        if result == errSecSuccess && trust != nil {
+            if let publicKey = SecTrustCopyPublicKey(trust!) {
+                self.init(secKey : publicKey)
+            } else {
+                throw Error.PublicKeyNotFoundInCertificate
+            }
+        } else {
+            throw Error.SecurityError(result)
+        }
+    }
     
-    public init(hashFunction : SignatureAlgorithm.HashFunction, key : SignatureKey) {
+    public static func keysFromPkcs12Identity(p12Data : NSData, passphrase : String) throws -> (publicKey : RSAPKCS1Key, privateKey : RSAPKCS1Key) {
+        
+        var importResult : CFArray? = nil
+        let status = SecPKCS12Import(p12Data, [kSecImportExportPassphrase as String: passphrase], &importResult)
+        
+        guard status == errSecSuccess else { throw Error.SecurityError(status) }
+        
+        if let array = importResult.map({unsafeBitCast($0,NSArray.self)}),
+            let content = array.firstObject as? NSDictionary,
+            let identity = (content[kSecImportItemIdentity as String] as! SecIdentity?)
+        {
+            var privateKey : SecKey? = nil
+            var certificate : SecCertificate? = nil
+            let status = (
+                SecIdentityCopyPrivateKey(identity, &privateKey),
+                SecIdentityCopyCertificate(identity, &certificate)
+            )
+            guard status.0 == errSecSuccess else { throw Error.SecurityError(status.0) }
+            guard status.1 == errSecSuccess else { throw Error.SecurityError(status.1) }
+            if privateKey != nil && certificate != nil {
+                return try (RSAPKCS1Key(secCertificate: certificate!),RSAPKCS1Key(secKey: privateKey!))
+            } else {
+                throw Error.InvalidP12ImportResult
+            }
+        } else {
+            throw Error.InvalidP12NoIdentityFound
+        }
+    }
+}
+
+public struct RSAPKCS1Verifier : SignatureValidator {
+    let hashFunction : SignatureAlgorithm.HashFunction
+    let key : RSAPKCS1Key
+    
+    public init(hashFunction : SignatureAlgorithm.HashFunction, key : RSAPKCS1Key) {
         self.hashFunction = hashFunction
         self.key = key
     }
@@ -47,16 +107,16 @@ public struct RSASSA_PKCS1Verifier : SignatureValidator {
     }
 }
 
-public struct RSASSA_PKCS1Signer : TokenSigner {
+public struct RSAPKCS1Signer : TokenSigner {
     enum Error : ErrorType {
         case CannotAllocateSignatureBuffer
         case SecurityError(OSStatus)
     }
     
     let hashFunction : SignatureAlgorithm.HashFunction
-    let key : SignatureKey
+    let key : RSAPKCS1Key
     
-    public init(hashFunction : SignatureAlgorithm.HashFunction, key : SignatureKey) {
+    public init(hashFunction : SignatureAlgorithm.HashFunction, key : RSAPKCS1Key) {
         self.hashFunction = hashFunction
         self.key = key
     }
