@@ -21,7 +21,7 @@ private func paddingForHashFunction(f : SignatureAlgorithm.HashFunction) -> SecP
 
 
 
-public struct RSAPKCS1Key {
+public struct RSAKey {
     enum Error : ErrorType {
         case SecurityError(OSStatus)
         case PublicKeyNotFoundInCertificate
@@ -56,7 +56,7 @@ public struct RSAPKCS1Key {
         }
     }
     
-    public static func keysFromPkcs12Identity(p12Data : NSData, passphrase : String) throws -> (publicKey : RSAPKCS1Key, privateKey : RSAPKCS1Key) {
+    public static func keysFromPkcs12Identity(p12Data : NSData, passphrase : String) throws -> (publicKey : RSAKey, privateKey : RSAKey) {
         
         var importResult : CFArray? = nil
         let status = SecPKCS12Import(p12Data, [kSecImportExportPassphrase as String: passphrase], &importResult)
@@ -76,7 +76,7 @@ public struct RSAPKCS1Key {
             guard status.0 == errSecSuccess else { throw Error.SecurityError(status.0) }
             guard status.1 == errSecSuccess else { throw Error.SecurityError(status.1) }
             if privateKey != nil && certificate != nil {
-                return try (RSAPKCS1Key(secCertificate: certificate!),RSAPKCS1Key(secKey: privateKey!))
+                return try (RSAKey(secCertificate: certificate!),RSAKey(secKey: privateKey!))
             } else {
                 throw Error.InvalidP12ImportResult
             }
@@ -88,9 +88,9 @@ public struct RSAPKCS1Key {
 
 public struct RSAPKCS1Verifier : SignatureValidator {
     let hashFunction : SignatureAlgorithm.HashFunction
-    let key : RSAPKCS1Key
+    let key : RSAKey
     
-    public init(key : RSAPKCS1Key, hashFunction : SignatureAlgorithm.HashFunction) {
+    public init(key : RSAKey, hashFunction : SignatureAlgorithm.HashFunction) {
         self.hashFunction = hashFunction
         self.key = key
     }
@@ -121,9 +121,9 @@ public struct RSAPKCS1Signer : TokenSigner {
     }
     
     let hashFunction : SignatureAlgorithm.HashFunction
-    let key : RSAPKCS1Key
+    let key : RSAKey
     
-    public init(hashFunction : SignatureAlgorithm.HashFunction, key : RSAPKCS1Key) {
+    public init(hashFunction : SignatureAlgorithm.HashFunction, key : RSAKey) {
         self.hashFunction = hashFunction
         self.key = key
     }

@@ -31,47 +31,47 @@ class KeyUtilsTests : XCTestCase {
         super.tearDown()
     }
     private func cleanRegisteredKeys() {
-        RSAPKCS1Key.removeKeyWithTag("testAddKey")
-        RSAPKCS1Key.removeKeyWithTag("testAddBadKey")
-        RSAPKCS1Key.removeKeyWithTag("PublicPEMKey")
-        RSAPKCS1Key.removeKeyWithTag("ModulusExponent")
+        RSAKey.removeKeyWithTag("testAddKey")
+        RSAKey.removeKeyWithTag("testAddBadKey")
+        RSAKey.removeKeyWithTag("PublicPEMKey")
+        RSAKey.removeKeyWithTag("ModulusExponent")
     }
     
     func testAddUpdateRemoveKey() {
         self.cleanRegisteredKeys()
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("testAddKey"))
+        XCTAssertNil(RSAKey.registeredKeyWithTag("testAddKey"))
         do {
-            try RSAPKCS1Key.registerOrUpdateKey(SampleKeyData, tag : "testAddKey")
+            try RSAKey.registerOrUpdateKey(SampleKeyData, tag : "testAddKey")
         } catch {
             XCTFail("should not fail \(error)")
         }
-        XCTAssertNotNil(RSAPKCS1Key.registeredKeyWithTag("testAddKey"))
+        XCTAssertNotNil(RSAKey.registeredKeyWithTag("testAddKey"))
         let key1Data = try! getKeyData("testAddKey")
         
         do {
-            try RSAPKCS1Key.registerOrUpdateKey(SampleKeyData2, tag : "testAddKey")
+            try RSAKey.registerOrUpdateKey(SampleKeyData2, tag : "testAddKey")
         } catch {
             XCTFail("should not fail \(error)")
         }
-        XCTAssertNotNil(RSAPKCS1Key.registeredKeyWithTag("testAddKey"))
+        XCTAssertNotNil(RSAKey.registeredKeyWithTag("testAddKey"))
         let key2Data = try! getKeyData("testAddKey")
         XCTAssertNotEqual(key1Data, key2Data)
         
-        RSAPKCS1Key.removeKeyWithTag("testAddKey")
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("testAddKey"))
+        RSAKey.removeKeyWithTag("testAddKey")
+        XCTAssertNil(RSAKey.registeredKeyWithTag("testAddKey"))
     }
     
     func testAddBadKeyFormat() {
         self.cleanRegisteredKeys()
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("testAddBadKey"))
+        XCTAssertNil(RSAKey.registeredKeyWithTag("testAddBadKey"))
         do {
-            try RSAPKCS1Key.registerOrUpdateKey("this_is_not_a_rsa_key".dataUsingEncoding(NSUTF8StringEncoding)!, tag : "testAddBadKey")
+            try RSAKey.registerOrUpdateKey("this_is_not_a_rsa_key".dataUsingEncoding(NSUTF8StringEncoding)!, tag : "testAddBadKey")
             XCTFail("should fail")
-        } catch RSAPKCS1Key.KeyUtilError.BadKeyFormat {}
+        } catch RSAKey.KeyUtilError.BadKeyFormat {}
         catch {
             XCTFail("should be a  KeyUtilError.BadKeyFormat  : \(error)")
         }
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("testAddKey"))
+        XCTAssertNil(RSAKey.registeredKeyWithTag("testAddKey"))
   
     }
     func testAddPublicPEMKey() {
@@ -79,16 +79,16 @@ class KeyUtilsTests : XCTestCase {
         let pemPath = NSBundle(forClass: self.dynamicType).pathForResource("public", ofType: "pem")!
         let pemData = NSData(contentsOfFile: pemPath)!
         
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("PublicPEMKey"))
+        XCTAssertNil(RSAKey.registeredKeyWithTag("PublicPEMKey"))
         do {
-            try RSAPKCS1Key.registerOrUpdatePublicPEMKey(pemData, tag : "PublicPEMKey")
+            try RSAKey.registerOrUpdatePublicPEMKey(pemData, tag : "PublicPEMKey")
         }
         catch {
             XCTFail("should not fail : \(error)")
         }
-        XCTAssertNotNil(RSAPKCS1Key.registeredKeyWithTag("PublicPEMKey"))
-        RSAPKCS1Key.removeKeyWithTag("PublicPEMKey")
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("PublicPEMKey"))
+        XCTAssertNotNil(RSAKey.registeredKeyWithTag("PublicPEMKey"))
+        RSAKey.removeKeyWithTag("PublicPEMKey")
+        XCTAssertNil(RSAKey.registeredKeyWithTag("PublicPEMKey"))
         
     }
     func testModulusExponent() {
@@ -97,16 +97,16 @@ class KeyUtilsTests : XCTestCase {
         let modulusData = NSData(contentsOfFile: modulusPath)!
         let exponentPath = NSBundle(forClass: self.dynamicType).pathForResource("public", ofType: "exponent")!
         let exponentData = NSData(contentsOfFile: exponentPath)!
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("ModulusExponent"))
+        XCTAssertNil(RSAKey.registeredKeyWithTag("ModulusExponent"))
         do {
-            try RSAPKCS1Key.registerOrUpdateKey(modulus : modulusData, exponent : exponentData, tag : "ModulusExponent")
+            try RSAKey.registerOrUpdateKey(modulus : modulusData, exponent : exponentData, tag : "ModulusExponent")
         }
         catch {
             XCTFail("should not fail : \(error)")
         }
-        XCTAssertNotNil(RSAPKCS1Key.registeredKeyWithTag("ModulusExponent"))
-        RSAPKCS1Key.removeKeyWithTag("ModulusExponent")
-        XCTAssertNil(RSAPKCS1Key.registeredKeyWithTag("ModulusExponent"))
+        XCTAssertNotNil(RSAKey.registeredKeyWithTag("ModulusExponent"))
+        RSAKey.removeKeyWithTag("ModulusExponent")
+        XCTAssertNil(RSAKey.registeredKeyWithTag("ModulusExponent"))
         
     }
 }

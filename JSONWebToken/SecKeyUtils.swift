@@ -45,7 +45,7 @@ import Security
 
 
 //these methods use a keychain api side effect to create public key from raw data
-public extension RSAPKCS1Key {
+public extension RSAKey {
     
     enum KeyUtilError : ErrorType {
         case NotStringReadable
@@ -54,7 +54,7 @@ public extension RSAPKCS1Key {
         case BadKeyFormat
     }
     
-    public static func registerOrUpdateKey(keyData : NSData, tag : String) throws -> RSAPKCS1Key {
+    public static func registerOrUpdateKey(keyData : NSData, tag : String) throws -> RSAKey {
         let key : SecKey? = try {
             if let existingData = try getKeyData(tag) {
                 let newData = keyData.dataByStrippingX509Header()
@@ -67,16 +67,16 @@ public extension RSAPKCS1Key {
             }
         }()
         if let result = key {
-            return RSAPKCS1Key(secKey : result)
+            return RSAKey(secKey : result)
         } else {
             throw KeyUtilError.BadKeyFormat
         }
     }
-    public static func registerOrUpdateKey(modulus modulus: NSData, exponent : NSData, tag : String) throws -> RSAPKCS1Key {
+    public static func registerOrUpdateKey(modulus modulus: NSData, exponent : NSData, tag : String) throws -> RSAKey {
         let combinedData = NSData(modulus: modulus, exponent: exponent)
-        return try RSAPKCS1Key.registerOrUpdateKey(combinedData, tag : tag)
+        return try RSAKey.registerOrUpdateKey(combinedData, tag : tag)
     }
-    public static func registerOrUpdatePublicPEMKey(keyData : NSData, tag : String) throws -> RSAPKCS1Key {
+    public static func registerOrUpdatePublicPEMKey(keyData : NSData, tag : String) throws -> RSAKey {
         guard let stringValue = String(data: keyData, encoding: NSUTF8StringEncoding) else {
             throw KeyUtilError.NotStringReadable
         }
@@ -104,10 +104,10 @@ public extension RSAPKCS1Key {
         guard let decodedKeyData = NSData(base64EncodedString: base64Content, options:[.IgnoreUnknownCharacters]) else {
             throw KeyUtilError.NotBase64Readable
         }
-        return try RSAPKCS1Key.registerOrUpdateKey(decodedKeyData, tag: tag)
+        return try RSAKey.registerOrUpdateKey(decodedKeyData, tag: tag)
     }
-    static func registeredKeyWithTag(tag : String) -> RSAPKCS1Key? {
-        return ((try? getKey(tag)) ?? nil).map(RSAPKCS1Key.init)
+    static func registeredKeyWithTag(tag : String) -> RSAKey? {
+        return ((try? getKey(tag)) ?? nil).map(RSAKey.init)
     }
     static func removeKeyWithTag(tag : String) {
         do {
@@ -134,7 +134,7 @@ private func getKey(tag: String) throws -> SecKey? {
     case errSecItemNotFound:
         return nil
     default:
-        throw RSAPKCS1Key.Error.SecurityError(status)
+        throw RSAKey.Error.SecurityError(status)
     }
 }
 internal func getKeyData(tag: String) throws -> NSData? {
@@ -151,14 +151,14 @@ internal func getKeyData(tag: String) throws -> NSData? {
     case errSecItemNotFound:
         return nil
     default:
-        throw RSAPKCS1Key.Error.SecurityError(status)
+        throw RSAKey.Error.SecurityError(status)
     }
 }
 private func updateKey(tag: String, data: NSData) throws {
     let query = matchQueryWithTag(tag)
     let status = SecItemUpdate(query, [String(kSecValueData): data])
     guard status == errSecSuccess else {
-        throw RSAPKCS1Key.Error.SecurityError(status)
+        throw RSAKey.Error.SecurityError(status)
     }
 }
 
@@ -166,7 +166,7 @@ private func deleteKey(tag: String) throws {
     let query = matchQueryWithTag(tag)
     let status = SecItemDelete(query)
     if status != errSecSuccess {
-        throw RSAPKCS1Key.Error.SecurityError(status)
+        throw RSAKey.Error.SecurityError(status)
     }
 }
 private func matchQueryWithTag(tag : String) -> Dictionary<String, AnyObject> {
@@ -191,7 +191,7 @@ private func addKey(tag: String, data: NSData) throws -> SecKeyRef? {
     if status == noErr || status == errSecDuplicateItem {
         return try getKey(tag)
     }
-    throw RSAPKCS1Key.Error.SecurityError(status)
+    throw RSAKey.Error.SecurityError(status)
 }
 
 ///
