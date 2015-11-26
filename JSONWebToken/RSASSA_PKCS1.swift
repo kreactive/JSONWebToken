@@ -28,7 +28,6 @@ public struct RSAPKCS1Key {
         case CannotCreateCertificateFromData
         case InvalidP12ImportResult
         case InvalidP12NoIdentityFound
-
     }
     let value : SecKeyRef
         
@@ -46,6 +45,14 @@ public struct RSAPKCS1Key {
             }
         } else {
             throw Error.SecurityError(result)
+        }
+    }
+    //Creates a certificate object from a DER representation of a certificate.
+    public init(certificateData data: NSData) throws {
+        if let cert = SecCertificateCreateWithData(nil, data) {
+            try self.init(secCertificate : cert)
+        } else {
+            throw Error.CannotCreateCertificateFromData
         }
     }
     

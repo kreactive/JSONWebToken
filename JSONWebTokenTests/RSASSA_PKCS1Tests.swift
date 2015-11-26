@@ -78,5 +78,13 @@ class RSASSA_PKCS1Tests: XCTestCase {
             XCTFail("should not fail \(error)")
         }
     }
+    func testCertificateImport() {
+        let certificateData = NSData(contentsOfFile: NSBundle(forClass : self.dynamicType).pathForResource("TestCertificate", ofType: "cer")!)!
+        do {
+            let _ = try RSAPKCS1Key(certificateData : certificateData)
+        } catch {
+            XCTFail("should not fail \(error)")
+        }
+    }
     
 }
