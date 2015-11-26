@@ -78,7 +78,7 @@ class ClaimTests : XCTestCase {
     }
     func testOrCombine() {
         let jwt = ReadSampleWithName("RS512")
-        let verifier = RSAPKCS1Verifier(hashFunction: .SHA512, key : SamplePublicKey)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA512)
         let otherVerifier = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
         XCTAssertTrue((verifier|otherVerifier).validateToken(jwt).isValid)
         XCTAssertTrue((otherVerifier|verifier).validateToken(jwt).isValid)

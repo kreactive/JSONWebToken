@@ -83,7 +83,7 @@ public struct RSAPKCS1Verifier : SignatureValidator {
     let hashFunction : SignatureAlgorithm.HashFunction
     let key : RSAPKCS1Key
     
-    public init(hashFunction : SignatureAlgorithm.HashFunction, key : RSAPKCS1Key) {
+    public init(key : RSAPKCS1Key, hashFunction : SignatureAlgorithm.HashFunction) {
         self.hashFunction = hashFunction
         self.key = key
     }
