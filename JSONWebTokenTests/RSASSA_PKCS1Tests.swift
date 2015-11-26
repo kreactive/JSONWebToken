@@ -58,6 +58,16 @@ class RSASSA_PKCS1Tests: XCTestCase {
         let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA512)
         XCTAssertFalse(verifier.validateToken(jwt).isValid)
     }
+    func testRS256Sign() {
+        let signer = RSAPKCS1Signer(hashFunction: .SHA256, key: SamplePrivateKey)
+        do {
+            let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
+            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA256)
+            XCTAssertTrue(verifier.validateToken(jwt).isValid)
+        } catch {
+            XCTFail("should not fail \(error)")
+        }
+    }
     func testRS384Sign() {
         let signer = RSAPKCS1Signer(hashFunction: .SHA384, key: SamplePrivateKey)
         do {
