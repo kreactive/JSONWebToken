@@ -16,6 +16,7 @@ Swift 2.1 library for decoding, validating, signing and verifying JWT
 	- JWT ID `jti`
 - No external dependencies : **CommonCrypto** and **Security** framework are used for signing and verifying 
 - Extensible : add your own claim validator and sign operations
+
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 # Usage
@@ -152,14 +153,56 @@ public enum ValidationResult {
 ```
 
 ## Claim validation
-All registered claims validators are implemented : 
-`RegisteredClaimValidator.issuer` validate that `iss` claim is defined and is a `String`
-`RegisteredClaimValidator.subject` validate that `sub` claim is defined and is a `String` 
-`RegisteredClaimValidator.audience` validate that `aud` claim is defined and is a `String` or `[String]`
-`RegisteredClaimValidator.expiration` validate that `exp` claim is defined, is an `Integer` transformable to `NSDate`, and is after current date 
-`RegisteredClaimValidator.notBefore` validate that `nbf` claim is defined, is an `Integer` transformable to `NSDate`, and is before current date 
-`RegisteredClaimValidator.issuedAt` validate that `iat` claim is defined, is an `Integer` transformable to `NSDate`
-`RegisteredClaimValidator.jwtIdentifier` validate that `jti` claim is defined and is a `String` 
+You can implement a claim validator with the `ClaimValidator` struct :
+```swift
+public struct ClaimValidator<T> : JSONWebTokenValidatorType {
+}
+```
+
+```swift
+let validator : ClaimValidator<Int> = ClaimValidator(key: "customClaim", transform: { (jsonValue : AnyObject) throws -> Int in
+	guard let numberValue = jsonValue as? NSNumber else {
+		throw ClaimValidatorError(message: "customClaim value \(jsonValue) is not the expected Number type")
+	}
+	return numberValue.integerValue
+}).withValidator { 1..<4 ~= $0 }
+```
+
+All registered claims validators are implemented :
+
+- `RegisteredClaimValidator.issuer` : `iss` claim is defined and is a `String`
+- `RegisteredClaimValidator.subject` : `sub` claim is defined and is a `String` 
+- `RegisteredClaimValidator.audience` : `aud` claim is defined and is a `String` or `[String]`
+- `RegisteredClaimValidator.expiration` : `exp` claim is defined, is an `Integer` transformable to `NSDate`, and is after current date 
+- `RegisteredClaimValidator.notBefore` : `nbf` claim is defined, is an `Integer` transformable to `NSDate`, and is before current date 
+- `RegisteredClaimValidator.issuedAt` : `iat` claim is defined, is an `Integer` transformable to `NSDate`
+- `RegisteredClaimValidator.jwtIdentifier` : `jti` claim is defined and is a `String` 
+
+And it can be extended : 
+```swift
+let myIssuerValidator = RegisteredClaimValidator.issuer.withValidator { $0 == "kreactive" }
+```
+# Unsupported signature
+
+## Verify
+Implement the `SignatureValidator` protocol on any `class` or `struct` to add and unsupported signature algorithm validator.
+ 
+```swift
+public protocol SignatureValidator : JSONWebTokenValidatorType {
+    func canVerifyWithSignatureAlgorithm(alg : SignatureAlgorithm) -> Bool
+    func verify(input : NSData, signature : NSData) -> Bool
+}
+```
+
+## Sign
+Implement the `TokenSigner` protocol on any `class` or `struct` to sign token with unsupported signature algorithm.
+
+```swift
+public protocol TokenSigner {
+    var signatureAlgorithm : SignatureAlgorithm {get}
+    func sign(input : NSData) throws -> NSData
+}
+```
 
 # Test
 
