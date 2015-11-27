@@ -138,5 +138,14 @@ class ClaimTests : XCTestCase {
         XCTAssertFalse(validationFormat.isValid)
         
     }
+    
+    func customClaimTest() {
+        let _ = ClaimValidator(key: "customClaim", transform: { (jsonValue : AnyObject) throws -> Int in
+            guard let numberValue = jsonValue as? NSNumber else {
+                throw ClaimValidatorError(message: "customClaim value \(jsonValue) is not the expected Number type")
+            }
+            return numberValue.integerValue
+        }).withValidator { 1..<4 ~= $0 }
+    }
 }
 

@@ -8,14 +8,17 @@ import Foundation
 
 
 public struct ClaimValidatorError : ErrorType {
-    let message : String
+    public let message : String
+    public init(message : String) {
+        self.message = message
+    }
 }
 public struct ClaimValidator<T> : JSONWebTokenValidatorType {
     private var isOptional : Bool = false
     private var validator : (T) -> ValidationResult = {_ in return .Success}
 
-    let key : String
-    let transform : (AnyObject) throws -> T
+    public let key : String
+    public let transform : (AnyObject) throws -> T
     
     public init(key : String, transform : (AnyObject) throws -> T) {
         self.key = key
