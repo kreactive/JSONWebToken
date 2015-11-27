@@ -140,7 +140,7 @@ public protocol JSONWebTokenValidatorType {
 }
 ```
 
-Implementing this protocol on any `class` or `struct` allow it to be combined with other validator using the `|` or `&` operator.
+Implementing this protocol on any `class` or `struct` allows it to be combined with other validator using the `|` or `&` operator.
 The validation method returns a `ValidationResult` :
 
 ```swift
