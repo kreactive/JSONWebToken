@@ -24,6 +24,31 @@ public struct ClaimValidator<T> : JSONWebTokenValidatorType {
         self.key = key
         self.transform = transform
     }
+    public static func stringTransform(value : AnyObject) throws -> String {
+        if let result = value as? String {
+            return result
+        } else {
+            throw ClaimValidatorError(message: "\(value) is not a String type value")
+        }
+    }
+    public static func dateTranform(value : AnyObject) throws -> NSDate {
+        return try NSDate(timeIntervalSince1970: ClaimValidator.numberTransform(value).doubleValue)
+    }
+    public static func numberTransform(value : AnyObject) throws -> NSNumber {
+        if let numberValue = value as? NSNumber {
+            return numberValue
+        } else {
+            throw ClaimValidatorError(message: "\(value) is not a Number type value")
+        }
+    }
+    public static func arrayTransform<U>(elementTransform : (AnyObject) throws -> U)(_ value : AnyObject) throws -> [U] {
+        if let array = value as? NSArray {
+            return try array.map(elementTransform)
+        } else {
+            throw ClaimValidatorError(message: "\(value) is not an Array type value")
+        }
+    }
+    
     public init(claim : JSONWebToken.Payload.RegisteredClaim, transform : (AnyObject) throws -> T) {
         self.init(key : claim.rawValue,transform : transform)
     }
@@ -69,48 +94,35 @@ public struct ClaimValidator<T> : JSONWebTokenValidatorType {
     }
 }
 public struct RegisteredClaimValidator {
-    private static let StringClaimTransform = { (value : AnyObject) throws -> String in
-        if let result = value as? String {
-            return result
-        } else {
-            throw ClaimValidatorError(message: "\(value) is not a String type value")
-        }
-    }
-    private static let DateClaimTransform = { (value : AnyObject) throws -> NSDate in
-        if let numberValue = value as? NSNumber {
-            return NSDate(timeIntervalSince1970: numberValue.doubleValue)
-        } else {
-            throw ClaimValidatorError(message: "\(value) is not a Number type value (date)")
-        }
-    }
-    public static let issuer = ClaimValidator(claim: .Issuer, transform: StringClaimTransform)
-    public static let subject = ClaimValidator(claim: .Subject, transform: StringClaimTransform)
+ 
+    public static let issuer = ClaimValidator(claim: .Issuer, transform: ClaimValidator<Any>.stringTransform)
+    public static let subject = ClaimValidator(claim: .Subject, transform:  ClaimValidator<Any>.stringTransform)
     public static let audience = ClaimValidator(claim: .Audience, transform: { value throws -> [String] in
-        if let singleAudience = value as? String {
+        if let singleAudience = try? ClaimValidator<Any>.stringTransform(value) {
             return [singleAudience]
-        } else if let multiple = value as? [String] {
+        } else if let multiple = try? ClaimValidator<Any>.arrayTransform(ClaimValidator<Any>.stringTransform)(value) {
             return multiple
         } else {
             throw ClaimValidatorError(message: "audience value \(value) is not an array or string value")
         }
     })
     
-    public static let expiration = ClaimValidator(claim: .ExpirationTime, transform: DateClaimTransform).withValidator { date -> ValidationResult in
+    public static let expiration = ClaimValidator(claim: .ExpirationTime, transform:  ClaimValidator<Any>.dateTranform).withValidator { date -> ValidationResult in
         if date.timeIntervalSinceNow >= 0.0 {
             return .Success
         } else {
             return .Failure(ClaimValidatorError(message: "token is expired"))
         }
     }
-    public static let notBefore = ClaimValidator(claim: .NotBefore, transform: DateClaimTransform).withValidator { date -> ValidationResult in
+    public static let notBefore = ClaimValidator(claim: .NotBefore, transform: ClaimValidator<Any>.dateTranform).withValidator { date -> ValidationResult in
         if date.timeIntervalSinceNow <= 0.0 {
             return .Success
         } else {
             return .Failure(ClaimValidatorError(message: "token cannot be used before \(date)"))
         }
     }
-    public static let issuedAt = ClaimValidator(claim: .IssuedAt, transform: DateClaimTransform)
-    public static let jwtIdentifier = ClaimValidator(claim: .JWTIdentifier, transform: StringClaimTransform)
+    public static let issuedAt = ClaimValidator(claim: .IssuedAt, transform: ClaimValidator<Any>.dateTranform)
+    public static let jwtIdentifier = ClaimValidator(claim: .JWTIdentifier, transform: ClaimValidator<Any>.stringTransform)
     
 }
 
