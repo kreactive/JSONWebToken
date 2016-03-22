@@ -153,13 +153,13 @@ public struct JSONWebToken {
         
         self.base64Parts = (parts[0],parts[1],parts[2])
         
-        guard let headerData = NSData(base64URLEncodedString: base64Parts.header, options: []) else {
+        guard let headerData = NSData(jwt_base64URLEncodedString: base64Parts.header, options: []) else {
             throw Error.CannotDecodeBase64Part(.Header,base64Parts.header)
         }
-        guard let payloadData = NSData(base64URLEncodedString: base64Parts.payload, options: []) else {
+        guard let payloadData = NSData(jwt_base64URLEncodedString: base64Parts.payload, options: []) else {
             throw Error.CannotDecodeBase64Part(.Payload,base64Parts.payload)
         }
-        guard NSData(base64URLEncodedString: base64Parts.signature, options: []) != nil else {
+        guard NSData(jwt_base64URLEncodedString: base64Parts.signature, options: []) != nil else {
             throw Error.CannotDecodeBase64Part(.Signature,base64Parts.signature)
         }
         
@@ -195,8 +195,8 @@ public struct JSONWebToken {
         self.payload = payload
         
         let header = ["alg" : self.signatureAlgorithm.jwtIdentifier , "typ" : "JWT"]
-        let headerBase64 = try NSJSONSerialization.dataWithJSONObject(header, options: []).base64URLEncodedStringWithOptions([])
-        let payloadBase64 = try NSJSONSerialization.dataWithJSONObject(payload.jsonPayload, options: []).base64URLEncodedStringWithOptions([])
+        let headerBase64 = try NSJSONSerialization.dataWithJSONObject(header, options: []).jwt_base64URLEncodedStringWithOptions([])
+        let payloadBase64 = try NSJSONSerialization.dataWithJSONObject(payload.jsonPayload, options: []).jwt_base64URLEncodedStringWithOptions([])
         
         let signatureInput = headerBase64 + "." + payloadBase64
         
@@ -204,7 +204,7 @@ public struct JSONWebToken {
             try $0.sign(signatureInput.dataUsingEncoding(NSUTF8StringEncoding)!)
         } ?? NSData()
         
-        let signatureBase64 = signature.base64URLEncodedStringWithOptions([])
+        let signatureBase64 = signature.jwt_base64URLEncodedStringWithOptions([])
         
         self.base64Parts = (headerBase64,payloadBase64,signatureBase64)
     }
@@ -213,11 +213,11 @@ public struct JSONWebToken {
     public func decodedDataForPart(part : Part) -> NSData {
         switch part {
         case .Header:
-            return NSData(base64URLEncodedString: base64Parts.header, options: [])!
+            return NSData(jwt_base64URLEncodedString: base64Parts.header, options: [])!
         case .Payload:
-            return NSData(base64URLEncodedString: base64Parts.payload, options: [])!
+            return NSData(jwt_base64URLEncodedString: base64Parts.payload, options: [])!
         case .Signature:
-            return NSData(base64URLEncodedString: base64Parts.signature, options: [])!
+            return NSData(jwt_base64URLEncodedString: base64Parts.signature, options: [])!
         }
     }
     

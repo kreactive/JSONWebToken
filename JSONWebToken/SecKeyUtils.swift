@@ -209,7 +209,7 @@ private extension NSInteger {
         var len = self
         var result: [CUnsignedChar] = [CUnsignedChar(i + 0x80)]
         
-        for (var j = 0; j < i; j++) {
+        for _ in 0..<i {
             result.insert(CUnsignedChar(len & 0xFF), atIndex: 1)
             len = len >> 8
         }
@@ -299,8 +299,13 @@ private extension NSData {
         var range = NSRange(location: 0, length: self.length)
         var offset = 0
         
+        let getOffsetAndIncrement = { () -> Int in
+            let result = offset
+            offset += 1
+            return result
+        }
         // ASN.1 Sequence
-        if bytes[offset++] == 0x30 {
+        if bytes[getOffsetAndIncrement()] == 0x30 {
             // Skip over length
             let _ = NSInteger(octetBytes: bytes, startIdx: &offset)
             
@@ -312,7 +317,7 @@ private extension NSData {
                 offset += OID.count
                 
                 // Type
-                if bytes[offset++] != 0x03 {
+                if bytes[getOffsetAndIncrement()] != 0x03 {
                     return self
                 }
                 
@@ -320,7 +325,7 @@ private extension NSData {
                 let _ = NSInteger(octetBytes: bytes, startIdx: &offset)
                 
                 // Contents should be separated by a null from the header
-                if bytes[offset++] != 0x00 {
+                if bytes[getOffsetAndIncrement()] != 0x00 {
                     return self
                 }
                 

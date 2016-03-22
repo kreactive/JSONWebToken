@@ -30,7 +30,7 @@ public func ClaimTransformNumber(value : AnyObject) throws -> NSNumber {
         throw ClaimValidatorError(message: "\(value) is not a Number type value")
     }
 }
-public func ClaimTransformArray<U>(elementTransform : (AnyObject) throws -> U)(_ value : AnyObject) throws -> [U] {
+public func ClaimTransformArray<U>(elementTransform : (AnyObject) throws -> U, value : AnyObject) throws -> [U] {
     if let array = value as? NSArray {
         return try array.map(elementTransform)
     } else {
@@ -100,7 +100,7 @@ public struct RegisteredClaimValidator {
     public static let audience = ClaimValidator(claim: .Audience, transform: { value throws -> [String] in
         if let singleAudience = try? ClaimTransformString(value) {
             return [singleAudience]
-        } else if let multiple = try? ClaimTransformArray(ClaimTransformString)(value) {
+        } else if let multiple = try? ClaimTransformArray(ClaimTransformString,value : value) {
             return multiple
         } else {
             throw ClaimValidatorError(message: "audience value \(value) is not an array or string value")
