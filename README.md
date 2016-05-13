@@ -1,5 +1,5 @@
 # JSONWebToken
-Swift 2.1 library for decoding, validating, signing and verifying JWT
+Swift library for decoding, validating, signing and verifying JWT
 
 # Features
 
