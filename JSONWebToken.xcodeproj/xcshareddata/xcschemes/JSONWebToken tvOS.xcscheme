@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "719156971D1D3BE900FC55C9"
-               BuildableName = "JSONWebToken tvOS.framework"
+               BuildableName = "JSONWebToken.framework"
                BlueprintName = "JSONWebToken tvOS"
                ReferencedContainer = "container:JSONWebToken.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "719156971D1D3BE900FC55C9"
-            BuildableName = "JSONWebToken tvOS.framework"
+            BuildableName = "JSONWebToken.framework"
             BlueprintName = "JSONWebToken tvOS"
             ReferencedContainer = "container:JSONWebToken.xcodeproj">
          </BuildableReference>
@@ -79,7 +79,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "719156971D1D3BE900FC55C9"
-            BuildableName = "JSONWebToken tvOS.framework"
+            BuildableName = "JSONWebToken.framework"
             BlueprintName = "JSONWebToken tvOS"
             ReferencedContainer = "container:JSONWebToken.xcodeproj">
          </BuildableReference>
@@ -97,7 +97,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "719156971D1D3BE900FC55C9"
-            BuildableName = "JSONWebToken tvOS.framework"
+            BuildableName = "JSONWebToken.framework"
             BlueprintName = "JSONWebToken tvOS"
             ReferencedContainer = "container:JSONWebToken.xcodeproj">
          </BuildableReference>
