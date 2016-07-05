@@ -5,7 +5,7 @@
 //  Created by Antoine Palazzolo on 17/11/15.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for JSONWebToken.
 FOUNDATION_EXPORT double JSONWebTokenVersionNumber;
