@@ -8,13 +8,13 @@
 import Foundation
 import Security
 
-private func paddingForHashFunction(f : SignatureAlgorithm.HashFunction) -> SecPadding {
+private func paddingForHashFunction(_ f : SignatureAlgorithm.HashFunction) -> SecPadding {
     switch f {
-    case .SHA256:
+    case .sha256:
         return SecPadding.PKCS1SHA256
-    case .SHA384:
+    case .sha384:
         return SecPadding.PKCS1SHA384
-    case .SHA512:
+    case .sha512:
         return SecPadding.PKCS1SHA512
     }
 }
@@ -22,14 +22,14 @@ private func paddingForHashFunction(f : SignatureAlgorithm.HashFunction) -> SecP
 
 
 public struct RSAKey {
-    enum Error : ErrorType {
-        case SecurityError(OSStatus)
-        case PublicKeyNotFoundInCertificate
-        case CannotCreateCertificateFromData
-        case InvalidP12ImportResult
-        case InvalidP12NoIdentityFound
+    enum Error : Swift.Error {
+        case securityError(OSStatus)
+        case publicKeyNotFoundInCertificate
+        case cannotCreateCertificateFromData
+        case invalidP12ImportResult
+        case invalidP12NoIdentityFound
     }
-    let value : SecKeyRef
+    let value : SecKey
         
     public init(secKey :SecKey) {
         self.value = secKey
@@ -41,29 +41,30 @@ public struct RSAKey {
             if let publicKey = SecTrustCopyPublicKey(trust!) {
                 self.init(secKey : publicKey)
             } else {
-                throw Error.PublicKeyNotFoundInCertificate
+                throw Error.publicKeyNotFoundInCertificate
             }
         } else {
-            throw Error.SecurityError(result)
+            throw Error.securityError(result)
         }
     }
     //Creates a certificate object from a DER representation of a certificate.
-    public init(certificateData data: NSData) throws {
-        if let cert = SecCertificateCreateWithData(nil, data) {
+    public init(certificateData data: Data) throws {
+        if let cert = SecCertificateCreateWithData(nil, data as CFData) {
             try self.init(secCertificate : cert)
         } else {
-            throw Error.CannotCreateCertificateFromData
+            throw Error.cannotCreateCertificateFromData
         }
     }
     
-    public static func keysFromPkcs12Identity(p12Data : NSData, passphrase : String) throws -> (publicKey : RSAKey, privateKey : RSAKey) {
+    public static func keysFromPkcs12Identity(_ p12Data : Data, passphrase : String) throws -> (publicKey : RSAKey, privateKey : RSAKey) {
         
         var importResult : CFArray? = nil
-        let status = SecPKCS12Import(p12Data, [kSecImportExportPassphrase as String: passphrase], &importResult)
+        let importParam = [kSecImportExportPassphrase as String: passphrase]
+        let status = SecPKCS12Import(p12Data as CFData,importParam as CFDictionary, &importResult)
         
-        guard status == errSecSuccess else { throw Error.SecurityError(status) }
+        guard status == errSecSuccess else { throw Error.securityError(status) }
         
-        if let array = importResult.map({unsafeBitCast($0,NSArray.self)}),
+        if let array = importResult.map({unsafeBitCast($0,to: NSArray.self)}),
             let content = array.firstObject as? NSDictionary,
             let identity = (content[kSecImportItemIdentity as String] as! SecIdentity?)
         {
@@ -73,15 +74,15 @@ public struct RSAKey {
                 SecIdentityCopyPrivateKey(identity, &privateKey),
                 SecIdentityCopyCertificate(identity, &certificate)
             )
-            guard status.0 == errSecSuccess else { throw Error.SecurityError(status.0) }
-            guard status.1 == errSecSuccess else { throw Error.SecurityError(status.1) }
+            guard status.0 == errSecSuccess else { throw Error.securityError(status.0) }
+            guard status.1 == errSecSuccess else { throw Error.securityError(status.1) }
             if privateKey != nil && certificate != nil {
                 return try (RSAKey(secCertificate: certificate!),RSAKey(secKey: privateKey!))
             } else {
-                throw Error.InvalidP12ImportResult
+                throw Error.invalidP12ImportResult
             }
         } else {
-            throw Error.InvalidP12NoIdentityFound
+            throw Error.invalidP12NoIdentityFound
         }
     }
 }
@@ -94,17 +95,29 @@ public struct RSAPKCS1Verifier : SignatureValidator {
         self.hashFunction = hashFunction
         self.key = key
     }
-    public func canVerifyWithSignatureAlgorithm(alg : SignatureAlgorithm) -> Bool {
-        if case SignatureAlgorithm.RSASSA_PKCS1(self.hashFunction) = alg {
+    public func canVerifyWithSignatureAlgorithm(_ alg : SignatureAlgorithm) -> Bool {
+        if case SignatureAlgorithm.rsassa_PKCS1(self.hashFunction) = alg {
             return true
         }
         return false
     }
-    public func verify(input : NSData, signature : NSData) -> Bool {
-        let signedDataHash = input.jwt_shaDigestWithSize(self.hashFunction.rawValue)
+    public func verify(_ input : Data, signature : Data) -> Bool {
+        let signedDataHash = (input as NSData).jwt_shaDigest(withSize: self.hashFunction.rawValue)
         let padding = paddingForHashFunction(self.hashFunction)
         
-        let result = SecKeyRawVerify(key.value, padding, UnsafePointer<UInt8>(signedDataHash.bytes), signedDataHash.length, UnsafePointer<UInt8>(signature.bytes), signature.length)
+        let result = input.withUnsafeBytes { inputRawPointer in
+            signedDataHash.withUnsafeBytes { signedHashRawPointer in
+                SecKeyRawVerify(
+                    key.value,
+                    padding,
+                    signedHashRawPointer,
+                    signedDataHash.count,
+                    inputRawPointer,
+                    signature.count
+                )
+            }
+        }
+        
         switch result {
         case errSecSuccess:
             return true
@@ -115,9 +128,8 @@ public struct RSAPKCS1Verifier : SignatureValidator {
 }
 
 public struct RSAPKCS1Signer : TokenSigner {
-    enum Error : ErrorType {
-        case CannotAllocateSignatureBuffer
-        case SecurityError(OSStatus)
+    enum Error : Swift.Error {
+        case securityError(OSStatus)
     }
     
     let hashFunction : SignatureAlgorithm.HashFunction
@@ -129,23 +141,24 @@ public struct RSAPKCS1Signer : TokenSigner {
     }
     
     public var signatureAlgorithm : SignatureAlgorithm {
-        return .RSASSA_PKCS1(self.hashFunction)
+        return .rsassa_PKCS1(self.hashFunction)
     }
 
-    public func sign(input : NSData) throws -> NSData {
-        let signedDataHash = input.jwt_shaDigestWithSize(self.hashFunction.rawValue)
+    public func sign(_ input : Data) throws -> Data {
+        let signedDataHash = (input as NSData).jwt_shaDigest(withSize: self.hashFunction.rawValue)
         let padding = paddingForHashFunction(self.hashFunction)
         
-        guard let result = NSMutableData(length: SecKeyGetBlockSize(self.key.value)) else { throw Error.CannotAllocateSignatureBuffer }
-        
-        var signatureSize = result.length
-        let status = SecKeyRawSign(key.value, padding, UnsafePointer<UInt8>(signedDataHash.bytes), signedDataHash.length, UnsafeMutablePointer<UInt8>(result.mutableBytes), &signatureSize)
+        var result = Data(count: SecKeyGetBlockSize(self.key.value))
+        var resultSize = result.count
+        let status = result.withUnsafeMutableBytes { resultBytes in
+            SecKeyRawSign(key.value, padding, (signedDataHash as NSData).bytes.bindMemory(to: UInt8.self, capacity: signedDataHash.count), signedDataHash.count, UnsafeMutablePointer<UInt8>(resultBytes), &resultSize)
+        }
         
         switch status {
         case errSecSuccess:
-            return result.subdataWithRange(NSMakeRange(0, signatureSize))
+            return result.subdata(in: 0..<resultSize)
         default:
-            throw Error.SecurityError(status)
+            throw Error.securityError(status)
         }
     }
 }

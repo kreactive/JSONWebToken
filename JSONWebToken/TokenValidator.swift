@@ -7,41 +7,41 @@
 import Foundation
 
 public enum ValidationResult {
-    case Success
-    case Failure(ErrorType)
+    case success
+    case failure(Error)
     
     public var isValid : Bool {
-        if case .Success = self {
+        if case .success = self {
             return true
         }
         return false
     }
 }
 public protocol JSONWebTokenValidatorType {
-    func validateToken(token : JSONWebToken) -> ValidationResult
+    func validateToken(_ token : JSONWebToken) -> ValidationResult
 }
 public struct JSONWebTokenValidator : JSONWebTokenValidatorType  {
-    private let validator : (token : JSONWebToken) -> ValidationResult
+    fileprivate let validator : (_ token : JSONWebToken) -> ValidationResult
     
-    public func validateToken(token : JSONWebToken) -> ValidationResult {
-        return self.validator(token: token)
+    public func validateToken(_ token : JSONWebToken) -> ValidationResult {
+        return self.validator(token)
     }
 }
 
-public struct CombinedValidatorError : ErrorType {
-    public let errors : [ErrorType]
+public struct CombinedValidatorError : Error {
+    public let errors : [Error]
 }
 
 public func &(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSONWebTokenValidatorType {
     let and = { (token : JSONWebToken) -> ValidationResult in
-        let errors = [lhs,rhs].map{ $0.validateToken(token) }.map { validation -> ErrorType? in
-            if case ValidationResult.Failure(let error) = validation {
-                return Optional.Some(error)
+        let errors = [lhs,rhs].map{ $0.validateToken(token) }.map { validation -> Error? in
+            if case ValidationResult.failure(let error) = validation {
+                return Optional.some(error)
             } else {
                 return nil
             }
             }.flatMap {$0}
-        return errors.count > 0 ? .Failure(CombinedValidatorError(errors: errors)) : .Success
+        return errors.count > 0 ? .failure(CombinedValidatorError(errors: errors)) : .success
     }
     return JSONWebTokenValidator(validator: and)
     
@@ -49,16 +49,16 @@ public func &(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) 
 
 public func |(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) -> JSONWebTokenValidatorType {
     let or = { (token : JSONWebToken) -> ValidationResult in
-        var errors = [ErrorType]()
+        var errors = [Error]()
         for validator in [lhs,rhs] {
             switch validator.validateToken(token) {
-            case .Success:
-                return .Success
-            case .Failure(let error):
+            case .success:
+                return .success
+            case .failure(let error):
                 errors.append(error)
             }
         }
-        return .Failure(CombinedValidatorError(errors: errors))
+        return .failure(CombinedValidatorError(errors: errors))
         
     }
     return JSONWebTokenValidator(validator: or)

@@ -9,11 +9,11 @@
 import Foundation
 import JSONWebToken
 
-func ReadRawSampleWithName(name : String) -> String {
-    let path = NSBundle(forClass: HMACTests.self).pathForResource(name, ofType: "jwt")!
-    return try! String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+func ReadRawSampleWithName(_ name : String) -> String {
+    let path = Bundle(for: HMACTests.self).path(forResource: name, ofType: "jwt")!
+    return try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
 }
-func ReadSampleWithName(name : String) -> JSONWebToken {
+func ReadSampleWithName(_ name : String) -> JSONWebToken {
     return try! JSONWebToken(string : ReadRawSampleWithName(name))
 }
 
@@ -27,8 +27,8 @@ let SamplePrivateKey : RSAKey = {
 }()
 
 let SampleIdentity : (publicKey : RSAKey,privateKey : RSAKey) = {
-    let path = NSBundle(forClass: HMACTests.self).pathForResource("identity", ofType: "p12")!
-    let p12Data = NSData(contentsOfFile : path)!
+    let path = Bundle(for: HMACTests.self).path(forResource: "identity", ofType: "p12")!
+    let p12Data = try! Data(contentsOf: URL(fileURLWithPath: path))
     return try! RSAKey.keysFromPkcs12Identity(p12Data, passphrase : "1234")
 }()
 
