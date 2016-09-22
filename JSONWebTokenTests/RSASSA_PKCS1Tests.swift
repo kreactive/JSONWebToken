@@ -24,72 +24,72 @@ class RSASSA_PKCS1Tests: XCTestCase {
     
     func testRS256VerifySuccess() {
         let jwt = ReadSampleWithName("RS256")
-        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA256)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha256)
         XCTAssertTrue(verifier.validateToken(jwt).isValid)
     }
     func testRS384VerifySuccess() {
         let jwt = ReadSampleWithName("RS384")
-        let verifier = RSAPKCS1Verifier( key : SamplePublicKey,hashFunction: .SHA384)
+        let verifier = RSAPKCS1Verifier( key : SamplePublicKey,hashFunction: .sha384)
         XCTAssertTrue(verifier.validateToken(jwt).isValid)
     }
     func testRS512VerifySuccess() {
         let jwt = ReadSampleWithName("RS512")
-        let verifier = RSAPKCS1Verifier( key : SamplePublicKey,hashFunction: .SHA512)
+        let verifier = RSAPKCS1Verifier( key : SamplePublicKey,hashFunction: .sha512)
         XCTAssertTrue(verifier.validateToken(jwt).isValid)
     }
     
     func testRS256VerifyFailure() {
         let jwt = ReadSampleWithName("RS256_2")
-        let verifier = RSAPKCS1Verifier(key : SamplePublicKey , hashFunction: .SHA256)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey , hashFunction: .sha256)
         XCTAssertFalse(verifier.validateToken(jwt).isValid)
     }
     func testRS384VerifyFailure() {
         let jwt = ReadSampleWithName("RS384_2")
-        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA384)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha384)
         XCTAssertFalse(verifier.validateToken(jwt).isValid)
     }
     func testRS512VerifyFailure() {
         let jwt = ReadSampleWithName("RS512_2")
-        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA512)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha512)
         XCTAssertFalse(verifier.validateToken(jwt).isValid)
     }
     func testVerifyOtherAlg() {
         let jwt = ReadSampleWithName("HS256")
-        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA512)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha512)
         XCTAssertFalse(verifier.validateToken(jwt).isValid)
     }
     func testRS256Sign() {
-        let signer = RSAPKCS1Signer(hashFunction: .SHA256, key: SamplePrivateKey)
+        let signer = RSAPKCS1Signer(hashFunction: .sha256, key: SamplePrivateKey)
         do {
             let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
-            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA256)
+            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha256)
             XCTAssertTrue(verifier.validateToken(jwt).isValid)
         } catch {
             XCTFail("should not fail \(error)")
         }
     }
     func testRS384Sign() {
-        let signer = RSAPKCS1Signer(hashFunction: .SHA384, key: SamplePrivateKey)
+        let signer = RSAPKCS1Signer(hashFunction: .sha384, key: SamplePrivateKey)
         do {
             let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
-            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA384)
+            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha384)
             XCTAssertTrue(verifier.validateToken(jwt).isValid)
         } catch {
             XCTFail("should not fail \(error)")
         }
     }
     func testRS512Sign() {
-        let signer = RSAPKCS1Signer(hashFunction: .SHA512, key: SamplePrivateKey)
+        let signer = RSAPKCS1Signer(hashFunction: .sha512, key: SamplePrivateKey)
         do {
             let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
-            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA512)
+            let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha512)
             XCTAssertTrue(verifier.validateToken(jwt).isValid)
         } catch {
             XCTFail("should not fail \(error)")
         }
     }
     func testCertificateImport() {
-        let certificateData = NSData(contentsOfFile: NSBundle(forClass : self.dynamicType).pathForResource("TestCertificate", ofType: "cer")!)!
+        let certificateData = try! Data(contentsOf: URL(fileURLWithPath: Bundle(for : type(of: self)).path(forResource: "TestCertificate", ofType: "cer")!))
         do {
             let _ = try RSAKey(certificateData : certificateData)
         } catch {

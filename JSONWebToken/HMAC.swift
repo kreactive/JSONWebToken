@@ -9,26 +9,26 @@ import Foundation
 
 
 public struct HMACSignature : SignatureValidator,TokenSigner {
-    let secret : NSData
+    let secret : Data
     let hashFunction : SignatureAlgorithm.HashFunction
-    public init(secret : NSData,hashFunction : SignatureAlgorithm.HashFunction) {
+    public init(secret : Data,hashFunction : SignatureAlgorithm.HashFunction) {
         self.secret = secret
         self.hashFunction = hashFunction
     }
-    public func canVerifyWithSignatureAlgorithm(alg : SignatureAlgorithm) -> Bool {
-        if case SignatureAlgorithm.HMAC(self.hashFunction) = alg {
+    public func canVerifyWithSignatureAlgorithm(_ alg : SignatureAlgorithm) -> Bool {
+        if case SignatureAlgorithm.hmac(self.hashFunction) = alg {
             return true
         }
         return false
     }
-    public func verify(input : NSData, signature : NSData) -> Bool {
-        return input.jwt_hmacSignatureWithSHAHashFuctionSize(self.hashFunction.rawValue, secret: secret) == signature
+    public func verify(_ input : Data, signature : Data) -> Bool {
+        return (input as NSData).jwt_hmacSignature(withSHAHashFuctionSize: self.hashFunction.rawValue, secret: secret) == signature
     }
     
     public var signatureAlgorithm : SignatureAlgorithm {
-        return .HMAC(self.hashFunction)
+        return .hmac(self.hashFunction)
     }
-    public func sign(input : NSData) throws -> NSData {
-        return input.jwt_hmacSignatureWithSHAHashFuctionSize(self.hashFunction.rawValue, secret: secret)
+    public func sign(_ input : Data) throws -> Data {
+        return (input as NSData).jwt_hmacSignature(withSHAHashFuctionSize: self.hashFunction.rawValue, secret: secret)
     }
 }

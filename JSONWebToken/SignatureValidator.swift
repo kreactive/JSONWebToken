@@ -7,25 +7,25 @@
 import Foundation
 
 public protocol SignatureValidator : JSONWebTokenValidatorType {
-    func canVerifyWithSignatureAlgorithm(alg : SignatureAlgorithm) -> Bool
-    func verify(input : NSData, signature : NSData) -> Bool
+    func canVerifyWithSignatureAlgorithm(_ alg : SignatureAlgorithm) -> Bool
+    func verify(_ input : Data, signature : Data) -> Bool
 }
-public enum SignatureValidatorError : ErrorType {
-    case AlgorithmMismatch
-    case BadInputData
-    case SignatureMismatch
+public enum SignatureValidatorError : Error {
+    case algorithmMismatch
+    case badInputData
+    case signatureMismatch
 }
 extension SignatureValidator {
-    public func validateToken(token : JSONWebToken) -> ValidationResult {
+    public func validateToken(_ token : JSONWebToken) -> ValidationResult {
         guard self.canVerifyWithSignatureAlgorithm(token.signatureAlgorithm) else {
-            return .Failure(SignatureValidatorError.AlgorithmMismatch)
+            return .failure(SignatureValidatorError.algorithmMismatch)
         }
-        guard let input = (token.base64Parts.header+"."+token.base64Parts.payload).dataUsingEncoding(NSUTF8StringEncoding) else {
-            return .Failure(SignatureValidatorError.BadInputData)
+        guard let input = (token.base64Parts.header+"."+token.base64Parts.payload).data(using: String.Encoding.utf8) else {
+            return .failure(SignatureValidatorError.badInputData)
         }
-        guard self.verify(input, signature: token.decodedDataForPart(.Signature))  else {
-            return .Failure(SignatureValidatorError.SignatureMismatch)
+        guard self.verify(input, signature: token.decodedDataForPart(.signature))  else {
+            return .failure(SignatureValidatorError.signatureMismatch)
         }
-        return .Success
+        return .success
     }
 }

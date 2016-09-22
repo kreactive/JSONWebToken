@@ -8,15 +8,15 @@
 
 import Foundation
 
-extension NSData {
-    convenience init?(jwt_base64URLEncodedString base64URLEncodedString: String, options : NSDataBase64DecodingOptions) {
+extension Data {
+    init?(jwt_base64URLEncodedString base64URLEncodedString: String, options : Data.Base64DecodingOptions) {
         let input = NSMutableString(string: base64URLEncodedString)
-        input.replaceOccurrencesOfString("-",withString: "+",
-            options: [.LiteralSearch],
+        input.replaceOccurrences(of: "-",with: "+",
+            options: [.literal],
             range: NSRange(location: 0,length: input.length)
         )
-        input.replaceOccurrencesOfString("_",withString: "/",
-            options: [.LiteralSearch],
+        input.replaceOccurrences(of: "_",with: "/",
+            options: [.literal],
             range: NSRange(location: 0,length: input.length)
         )
         switch (input.length % 4)
@@ -24,28 +24,32 @@ extension NSData {
         case 0:
             break
         case 1:
-            input.appendString("===");
+            input.append("===");
         case 2:
-            input.appendString("==");
+            input.append("==");
         case 3:
-            input.appendString("=");
+            input.append("=");
         default:
             fatalError("unreachable")
         }
-        self.init(base64EncodedString : input as String, options : options)
+        if let decoded = Data(base64Encoded: input as String, options: options){
+             self = decoded
+        } else {
+            return nil
+        }
     }
-    func jwt_base64URLEncodedStringWithOptions(options: NSDataBase64EncodingOptions) -> String {
-        let result = NSMutableString(string: self.base64EncodedStringWithOptions(options))
-        result.replaceOccurrencesOfString("+",withString: "-",
-            options: [.LiteralSearch],
+    func jwt_base64URLEncodedStringWithOptions(_ options: NSData.Base64EncodingOptions) -> String {
+        let result = NSMutableString(string: self.base64EncodedString(options: options))
+        result.replaceOccurrences(of: "+",with: "-",
+            options: [.literal],
             range: NSRange(location: 0,length: result.length)
         )
-        result.replaceOccurrencesOfString("/",withString: "_",
-            options: [.LiteralSearch],
+        result.replaceOccurrences(of: "/",with: "_",
+            options: [.literal],
             range: NSRange(location: 0,length: result.length)
         )
-        result.replaceOccurrencesOfString("=",withString: "",
-            options: [.LiteralSearch],
+        result.replaceOccurrences(of: "=",with: "",
+            options: [.literal],
             range: NSRange(location: 0,length: result.length)
         )
         return result as String

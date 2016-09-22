@@ -17,9 +17,9 @@ class GenerateTests : XCTestCase {
     func testGenerateWithNone() {
         do {
             let jwt = try JSONWebToken(payload : SamplePayload)
-            XCTAssert(jwt.decodedDataForPart(.Header) != NSData())
-            XCTAssert(jwt.decodedDataForPart(.Payload) != NSData())
-            XCTAssert(jwt.decodedDataForPart(.Signature) == NSData())
+            XCTAssert(jwt.decodedDataForPart(.header) != Data())
+            XCTAssert(jwt.decodedDataForPart(.payload) != Data())
+            XCTAssert(jwt.decodedDataForPart(.signature) == Data())
 
         } catch {
             XCTFail("should not fail \(error)")
@@ -52,7 +52,7 @@ class GenerateTests : XCTestCase {
             XCTAssert(payload.audience == ["coucou","coucou2"])
 
 
-            let expirationDate = NSDate.distantFuture()
+            let expirationDate = Date.distantFuture
 
             payload.expiration = expirationDate
             XCTAssertNotNil(payload.expiration)
@@ -61,7 +61,7 @@ class GenerateTests : XCTestCase {
             XCTAssertNil(payload.expiration)
             payload.expiration = expirationDate
             
-            let notBeforeDate = NSDate.distantPast()
+            let notBeforeDate = Date.distantPast
 
             payload.notBefore = notBeforeDate
             XCTAssertNotNil(payload.notBefore)
@@ -70,7 +70,7 @@ class GenerateTests : XCTestCase {
             XCTAssertNil(payload.notBefore)
             payload.notBefore = notBeforeDate
             
-            let issuedAtDate = NSDate()
+            let issuedAtDate = Date()
             payload.issuedAt = issuedAtDate
             XCTAssertNotNil(payload.issuedAt)
             XCTAssertEqualWithAccuracy(payload.issuedAt!.timeIntervalSince1970, issuedAtDate.timeIntervalSince1970, accuracy: 0.9999999)
@@ -79,7 +79,7 @@ class GenerateTests : XCTestCase {
             payload.issuedAt = issuedAtDate
             
             
-            let jwti = NSUUID().UUIDString
+            let jwti = UUID().uuidString
             payload.jwtIdentifier = jwti
             XCTAssert(payload.jwtIdentifier == jwti)
             payload.jwtIdentifier = nil
@@ -87,7 +87,7 @@ class GenerateTests : XCTestCase {
             payload.jwtIdentifier = jwti
             
             let jwt = try JSONWebToken(payload : payload)
-            if let stringData = String(data : jwt.rawData , encoding : NSUTF8StringEncoding) {
+            if let stringData = String(data : jwt.rawData , encoding : String.Encoding.utf8) {
                 let _ = try JSONWebToken(string : stringData)
             } else {
                 XCTFail()

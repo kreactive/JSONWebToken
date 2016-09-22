@@ -11,67 +11,67 @@ import Foundation
 
 public enum SignatureAlgorithm {
     public enum HashFunction : Int {
-        case SHA256 = 256
-        case SHA384 = 384
-        case SHA512 = 512
+        case sha256 = 256
+        case sha384 = 384
+        case sha512 = 512
         
-        private var jwtIdentifierSuffix : String {
+        fileprivate var jwtIdentifierSuffix : String {
             switch self {
-            case .SHA256:
+            case .sha256:
                 return "256"
-            case .SHA384:
+            case .sha384:
                 return "384"
-            case .SHA512:
+            case .sha512:
                 return "512"
             }
         }
     }
     
-    case None
-    case HMAC(HashFunction) // HMAC -> HSXXX
-    case RSASSA_PKCS1(HashFunction) // RSASSA-PKCS1-v1_5 -> RSXXX
-    case ECDSA(HashFunction) // ECDSA -> ESXXX
-    case RSASSA_PSS(HashFunction) //RSASSA-PSS -> PSXXX
+    case none
+    case hmac(HashFunction) // HMAC -> HSXXX
+    case rsassa_PKCS1(HashFunction) // RSASSA-PKCS1-v1_5 -> RSXXX
+    case ecdsa(HashFunction) // ECDSA -> ESXXX
+    case rsassa_PSS(HashFunction) //RSASSA-PSS -> PSXXX
     
     public init(name : String) throws {
-        guard name.characters.count > 0 else {throw JSONWebToken.Error.InvalidSignatureAlgorithm(name)}
-        guard name.lowercaseString != "none" else { self = .None; return }
+        guard name.characters.count > 0 else {throw JSONWebToken.Error.invalidSignatureAlgorithm(name)}
+        guard name.lowercased() != "none" else { self = .none; return }
         
-        let prefixIndex = name.startIndex.advancedBy(2)
-        let prefix = name.substringToIndex(prefixIndex)
-        let suffix = name.substringFromIndex(prefixIndex)
+        let prefixIndex = name.characters.index(name.startIndex, offsetBy: 2)
+        let prefix = name.substring(to: prefixIndex)
+        let suffix = name.substring(from: prefixIndex)
         
         let hashFunction : HashFunction = try {
             switch suffix {
-            case HashFunction.SHA256.jwtIdentifierSuffix:
-                return .SHA256
-            case HashFunction.SHA384.jwtIdentifierSuffix:
-                return .SHA384
-            case HashFunction.SHA512.jwtIdentifierSuffix:
-                return .SHA512
+            case HashFunction.sha256.jwtIdentifierSuffix:
+                return .sha256
+            case HashFunction.sha384.jwtIdentifierSuffix:
+                return .sha384
+            case HashFunction.sha512.jwtIdentifierSuffix:
+                return .sha512
             default:
-                throw JSONWebToken.Error.InvalidSignatureAlgorithm(name)
+                throw JSONWebToken.Error.invalidSignatureAlgorithm(name)
             }
             }()
         switch prefix {
-        case "HS" : self = .HMAC(hashFunction)
-        case "RS" : self = .RSASSA_PKCS1(hashFunction)
-        case "ES" : self = .ECDSA(hashFunction)
-        case "PS" : self = .RSASSA_PSS(hashFunction)
-        default : throw JSONWebToken.Error.InvalidSignatureAlgorithm(name)
+        case "HS" : self = .hmac(hashFunction)
+        case "RS" : self = .rsassa_PKCS1(hashFunction)
+        case "ES" : self = .ecdsa(hashFunction)
+        case "PS" : self = .rsassa_PSS(hashFunction)
+        default : throw JSONWebToken.Error.invalidSignatureAlgorithm(name)
         }
     }
     var jwtIdentifier : String {
         switch self {
-        case .None:
+        case .none:
             return "none"
-        case .HMAC(let f):
+        case .hmac(let f):
             return "HS"+f.jwtIdentifierSuffix
-        case .RSASSA_PKCS1(let f):
+        case .rsassa_PKCS1(let f):
             return "RS"+f.jwtIdentifierSuffix
-        case .RSASSA_PSS(let f):
+        case .rsassa_PSS(let f):
             return "PS"+f.jwtIdentifierSuffix
-        case .ECDSA(let f):
+        case .ecdsa(let f):
             return "ES"+f.jwtIdentifierSuffix
         }
     }

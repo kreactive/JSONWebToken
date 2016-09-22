@@ -47,18 +47,17 @@ import Security
 //these methods use a keychain api side effect to create public key from raw data
 public extension RSAKey {
     
-    enum KeyUtilError : ErrorType {
-        case NotStringReadable
-        case BadPEMArmor
-        case NotBase64Readable
-        case BadKeyFormat
+    enum KeyUtilError : Swift.Error {
+        case notStringReadable
+        case badPEMArmor
+        case notBase64Readable
+        case badKeyFormat
     }
-    
-    public static func registerOrUpdateKey(keyData : NSData, tag : String) throws -> RSAKey {
+    @discardableResult public static func registerOrUpdateKey(_ keyData : Data, tag : String) throws -> RSAKey {
         let key : SecKey? = try {
             if let existingData = try getKeyData(tag) {
                 let newData = keyData.dataByStrippingX509Header()
-                if !existingData.isEqualToData(newData) {
+                if existingData != newData {
                     try updateKey(tag, data: newData)
                 }
                 return try getKey(tag)
@@ -69,60 +68,60 @@ public extension RSAKey {
         if let result = key {
             return RSAKey(secKey : result)
         } else {
-            throw KeyUtilError.BadKeyFormat
+            throw KeyUtilError.badKeyFormat
         }
     }
-    public static func registerOrUpdateKey(modulus modulus: NSData, exponent : NSData, tag : String) throws -> RSAKey {
-        let combinedData = NSData(modulus: modulus, exponent: exponent)
+    @discardableResult public static func registerOrUpdateKey(modulus: Data, exponent : Data, tag : String) throws -> RSAKey {
+        let combinedData = Data(modulus: modulus, exponent: exponent)
         return try RSAKey.registerOrUpdateKey(combinedData, tag : tag)
     }
-    public static func registerOrUpdatePublicPEMKey(keyData : NSData, tag : String) throws -> RSAKey {
-        guard let stringValue = String(data: keyData, encoding: NSUTF8StringEncoding) else {
-            throw KeyUtilError.NotStringReadable
+    @discardableResult public static func registerOrUpdatePublicPEMKey(_ keyData : Data, tag : String) throws -> RSAKey {
+        guard let stringValue = String(data: keyData, encoding: String.Encoding.utf8) else {
+            throw KeyUtilError.notStringReadable
         }
         
         let base64Content : String = try {
             //remove ----BEGIN and ----END
-            let scanner = NSScanner(string: stringValue)
-            scanner.charactersToBeSkipped = NSCharacterSet.whitespaceAndNewlineCharacterSet()
-            if scanner.scanString("-----BEGIN", intoString: nil) {
-                scanner.scanUpToString("KEY-----", intoString: nil)
-                guard scanner.scanString("KEY-----", intoString: nil) else {
-                    throw KeyUtilError.BadPEMArmor
+            let scanner = Scanner(string: stringValue)
+            scanner.charactersToBeSkipped = CharacterSet.whitespacesAndNewlines
+            if scanner.scanString("-----BEGIN", into: nil) {
+                scanner.scanUpTo("KEY-----", into: nil)
+                guard scanner.scanString("KEY-----", into: nil) else {
+                    throw KeyUtilError.badPEMArmor
                 }
                 
                 var content : NSString? = nil
-                scanner.scanUpToString("-----END", intoString: &content)
-                guard scanner.scanString("-----END", intoString: nil) else {
-                    throw KeyUtilError.BadPEMArmor
+                scanner.scanUpTo("-----END", into: &content)
+                guard scanner.scanString("-----END", into: nil) else {
+                    throw KeyUtilError.badPEMArmor
                 }
-                return content?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                return content?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             }
             return nil
         }() ?? stringValue
         
-        guard let decodedKeyData = NSData(base64EncodedString: base64Content, options:[.IgnoreUnknownCharacters]) else {
-            throw KeyUtilError.NotBase64Readable
+        guard let decodedKeyData = Data(base64Encoded: base64Content, options:[.ignoreUnknownCharacters]) else {
+            throw KeyUtilError.notBase64Readable
         }
         return try RSAKey.registerOrUpdateKey(decodedKeyData, tag: tag)
     }
-    static func registeredKeyWithTag(tag : String) -> RSAKey? {
+    static func registeredKeyWithTag(_ tag : String) -> RSAKey? {
         return ((try? getKey(tag)) ?? nil).map(RSAKey.init)
     }
-    static func removeKeyWithTag(tag : String) {
+    static func removeKeyWithTag(_ tag : String) {
         do {
             try deleteKey(tag)
         } catch {}
     }
 }
 
-private func getKey(tag: String) throws -> SecKey? {
+private func getKey(_ tag: String) throws -> SecKey? {
     var keyRef: AnyObject?
     
     var query = matchQueryWithTag(tag)
-    query[String(kSecReturnRef)] = kCFBooleanTrue as CFBoolean
+    query[kSecReturnRef as String] = kCFBooleanTrue
     
-    let status = SecItemCopyMatching(query, &keyRef)
+    let status = SecItemCopyMatching(query as CFDictionary, &keyRef)
     
     switch status {
     case errSecSuccess:
@@ -134,64 +133,64 @@ private func getKey(tag: String) throws -> SecKey? {
     case errSecItemNotFound:
         return nil
     default:
-        throw RSAKey.Error.SecurityError(status)
+        throw RSAKey.Error.securityError(status)
     }
 }
-internal func getKeyData(tag: String) throws -> NSData? {
+internal func getKeyData(_ tag: String) throws -> Data? {
     
     var query = matchQueryWithTag(tag)
-    query[String(kSecReturnData)] = kCFBooleanTrue as CFBoolean
+    query[kSecReturnData as String] = kCFBooleanTrue
     
     var result: AnyObject? = nil
-    let status = SecItemCopyMatching(query, &result)
+    let status = SecItemCopyMatching(query as CFDictionary, &result)
 
     switch status {
     case errSecSuccess:
-        return (result as! NSData)
+        return (result as! Data)
     case errSecItemNotFound:
         return nil
     default:
-        throw RSAKey.Error.SecurityError(status)
+        throw RSAKey.Error.securityError(status)
     }
 }
-private func updateKey(tag: String, data: NSData) throws {
+private func updateKey(_ tag: String, data: Data) throws {
     let query = matchQueryWithTag(tag)
-    let status = SecItemUpdate(query, [String(kSecValueData): data])
+    let updateParam = [kSecValueData as String : data]
+    let status = SecItemUpdate(query as CFDictionary, updateParam as CFDictionary)
     guard status == errSecSuccess else {
-        throw RSAKey.Error.SecurityError(status)
+        throw RSAKey.Error.securityError(status)
     }
 }
 
-private func deleteKey(tag: String) throws {
+private func deleteKey(_ tag: String) throws {
     let query = matchQueryWithTag(tag)
-    let status = SecItemDelete(query)
+    let status = SecItemDelete(query as CFDictionary)
     if status != errSecSuccess {
-        throw RSAKey.Error.SecurityError(status)
+        throw RSAKey.Error.securityError(status)
     }
 }
-private func matchQueryWithTag(tag : String) -> Dictionary<String, AnyObject> {
+private func matchQueryWithTag(_ tag : String) -> Dictionary<String, Any> {
     return [
-        String(kSecAttrKeyType): kSecAttrKeyTypeRSA,
-        String(kSecClass): kSecClassKey as CFStringRef,
-        String(kSecAttrApplicationTag): tag as CFStringRef,
+        kSecAttrKeyType as String : kSecAttrKeyTypeRSA,
+        kSecClass as String : kSecClassKey,
+        kSecAttrApplicationTag as String : tag,
     ]
 }
 
-private func addKey(tag: String, data: NSData) throws -> SecKeyRef? {
-    var publicAttributes = Dictionary<String, AnyObject>()
-    publicAttributes[String(kSecAttrKeyType)] = kSecAttrKeyTypeRSA
-    publicAttributes[String(kSecClass)] = kSecClassKey as CFStringRef
-    publicAttributes[String(kSecAttrApplicationTag)] = tag as CFStringRef
-    publicAttributes[String(kSecValueData)] = data as CFDataRef
-    publicAttributes[String(kSecReturnPersistentRef)] = true as CFBooleanRef
+private func addKey(_ tag: String, data: Data) throws -> SecKey? {
+    var publicAttributes = Dictionary<String, Any>()
+    publicAttributes[kSecAttrKeyType as String] = kSecAttrKeyTypeRSA
+    publicAttributes[kSecClass as String] = kSecClassKey
+    publicAttributes[kSecAttrApplicationTag as String] = tag as CFString
+    publicAttributes[kSecValueData as String] = data as CFData
+    publicAttributes[kSecReturnPersistentRef as String] = kCFBooleanTrue
     
-    var persistentRef: AnyObject?
-    let status = SecItemAdd(publicAttributes, &persistentRef)
-    
+    var persistentRef: CFTypeRef?
+    let status = SecItemAdd(publicAttributes as CFDictionary, &persistentRef)
     if status == noErr || status == errSecDuplicateItem {
         return try getKey(tag)
     }
-    throw RSAKey.Error.SecurityError(status)
+    throw RSAKey.Error.securityError(status)
 }
 
 ///
@@ -210,21 +209,21 @@ private extension NSInteger {
         var result: [CUnsignedChar] = [CUnsignedChar(i + 0x80)]
         
         for _ in 0..<i {
-            result.insert(CUnsignedChar(len & 0xFF), atIndex: 1)
+            result.insert(CUnsignedChar(len & 0xFF), at: 1)
             len = len >> 8
         }
         
         return result
     }
     
-    init?(octetBytes: [CUnsignedChar], inout startIdx: NSInteger) {
+    init?(octetBytes: [CUnsignedChar], startIdx: inout NSInteger) {
         if octetBytes[startIdx] < 128 {
             // Short form
             self.init(octetBytes[startIdx])
             startIdx += 1
         } else {
             // Long form
-            let octets = NSInteger(octetBytes[startIdx] - 128)
+            let octets = NSInteger(octetBytes[startIdx] - CUnsignedChar(128))
             
             if octets > octetBytes.count - startIdx {
                 self.init(0)
@@ -247,15 +246,15 @@ private extension NSInteger {
 ///
 /// Manipulating data
 ///
-private extension NSData {
-    convenience init(modulus: NSData, exponent: NSData) {
+private extension Data {
+    init(modulus: Data, exponent: Data) {
         // Make sure neither the modulus nor the exponent start with a null byte
-        var modulusBytes = [CUnsignedChar](UnsafeBufferPointer<CUnsignedChar>(start: UnsafePointer<CUnsignedChar>(modulus.bytes), count: modulus.length / sizeof(CUnsignedChar)))
-        let exponentBytes = [CUnsignedChar](UnsafeBufferPointer<CUnsignedChar>(start: UnsafePointer<CUnsignedChar>(exponent.bytes), count: exponent.length / sizeof(CUnsignedChar)))
+        var modulusBytes = [CUnsignedChar](UnsafeBufferPointer<CUnsignedChar>(start: (modulus as NSData).bytes.bindMemory(to: CUnsignedChar.self, capacity: modulus.count), count: modulus.count / MemoryLayout<CUnsignedChar>.size))
+        let exponentBytes = [CUnsignedChar](UnsafeBufferPointer<CUnsignedChar>(start: (exponent as NSData).bytes.bindMemory(to: CUnsignedChar.self, capacity: exponent.count), count: exponent.count / MemoryLayout<CUnsignedChar>.size))
         
         // Make sure modulus starts with a 0x00
-        if let prefix = modulusBytes.first where prefix != 0x00 {
-            modulusBytes.insert(0x00, atIndex: 0)
+        if let prefix = modulusBytes.first , prefix != 0x00 {
+            modulusBytes.insert(0x00, at: 0)
         }
         
         // Lengths
@@ -271,64 +270,65 @@ private extension NSData {
         
         // Container type and size
         builder.append(0x30)
-        builder.appendContentsOf(totalLengthOctets)
-        data.appendBytes(builder, length: builder.count)
-        builder.removeAll(keepCapacity: false)
+        builder.append(contentsOf: totalLengthOctets)
+        data.append(builder, length: builder.count)
+        builder.removeAll(keepingCapacity: false)
         
         // Modulus
         builder.append(0x02)
-        builder.appendContentsOf(modulusLengthOctets)
-        data.appendBytes(builder, length: builder.count)
-        builder.removeAll(keepCapacity: false)
-        data.appendBytes(modulusBytes, length: modulusBytes.count)
+        builder.append(contentsOf: modulusLengthOctets)
+        data.append(builder, length: builder.count)
+        builder.removeAll(keepingCapacity: false)
+        data.append(modulusBytes, length: modulusBytes.count)
         
         // Exponent
         builder.append(0x02)
-        builder.appendContentsOf(exponentLengthOctets)
-        data.appendBytes(builder, length: builder.count)
-        data.appendBytes(exponentBytes, length: exponentBytes.count)
+        builder.append(contentsOf: exponentLengthOctets)
+        data.append(builder, length: builder.count)
+        data.append(exponentBytes, length: exponentBytes.count)
         
-        self.init(data: data)
+        self = Data(referencing: data)
     }
     
     
-    func dataByStrippingX509Header() -> NSData {
-        var bytes = [CUnsignedChar](count: self.length, repeatedValue: 0)
-        self.getBytes(&bytes, length:self.length)
+    func dataByStrippingX509Header() -> Data {
         
-        var range = NSRange(location: 0, length: self.length)
+        var bytes = [CUnsignedChar](repeating: 0, count: self.count)
+        (self as NSData).getBytes(&bytes, length:self.count)
+        
+        var range = NSRange(location: 0, length: self.count)
         var offset = 0
         
-        let getOffsetAndIncrement = { () -> Int in
-            let result = offset
-            offset += 1
-            return result
-        }
         // ASN.1 Sequence
-        if bytes[getOffsetAndIncrement()] == 0x30 {
+        if bytes[offset] == 0x30 {
+            offset += 1
+            
             // Skip over length
             let _ = NSInteger(octetBytes: bytes, startIdx: &offset)
             
             let OID: [CUnsignedChar] = [0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86,
-                0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00]
+                                        0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00]
             let slice: [CUnsignedChar] = Array(bytes[offset..<(offset + OID.count)])
             
             if slice == OID {
                 offset += OID.count
                 
                 // Type
-                if bytes[getOffsetAndIncrement()] != 0x03 {
+                if bytes[offset] != 0x03 {
                     return self
                 }
+                
+                offset += 1
                 
                 // Skip over the contents length field
                 let _ = NSInteger(octetBytes: bytes, startIdx: &offset)
                 
                 // Contents should be separated by a null from the header
-                if bytes[getOffsetAndIncrement()] != 0x00 {
+                if bytes[offset] != 0x00 {
                     return self
                 }
                 
+                offset += 1
                 range.location += offset
                 range.length -= offset
             } else {
@@ -336,6 +336,6 @@ private extension NSData {
             }
         }
         
-        return self.subdataWithRange(range)
+        return self.subdata(in : range.toRange()!)
     }
 }

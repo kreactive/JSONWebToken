@@ -36,7 +36,7 @@ class ClaimTests : XCTestCase {
             RegisteredClaimValidator.subject.withValidator {$0 == "antoine"} &
             RegisteredClaimValidator.jwtIdentifier.withValidator{$0 == "123456789"} &
             RegisteredClaimValidator.audience.withValidator {$0.contains("test-app")} &
-            HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA256)
+            HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha256)
         
         let jwt = ReadSampleWithName("all_claim_valid_2_signed")
         let validation = validator.validateToken(jwt)
@@ -78,8 +78,8 @@ class ClaimTests : XCTestCase {
     }
     func testOrCombine() {
         let jwt = ReadSampleWithName("RS512")
-        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .SHA512)
-        let otherVerifier = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
+        let verifier = RSAPKCS1Verifier(key : SamplePublicKey, hashFunction: .sha512)
+        let otherVerifier = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha512)
         XCTAssertTrue((verifier|otherVerifier).validateToken(jwt).isValid)
         XCTAssertTrue((otherVerifier|verifier).validateToken(jwt).isValid)
 
@@ -140,11 +140,11 @@ class ClaimTests : XCTestCase {
     }
     
     func customClaimTest() {
-        let _ = ClaimValidator(key: "customClaim", transform: { (jsonValue : AnyObject) throws -> Int in
+        let _ = ClaimValidator(key: "customClaim", transform: { (jsonValue : Any) throws -> Int in
             guard let numberValue = jsonValue as? NSNumber else {
                 throw ClaimValidatorError(message: "customClaim value \(jsonValue) is not the expected Number type")
             }
-            return numberValue.integerValue
+            return numberValue.intValue
         }).withValidator { 1..<4 ~= $0 }
     }
 }

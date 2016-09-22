@@ -17,7 +17,7 @@ class DecodeTests : XCTestCase {
             do {
                 let _ = try JSONWebToken(string : $0)
                 XCTFail("should fail")
-            } catch JSONWebToken.Error.BadTokenStructure {
+            } catch JSONWebToken.Error.badTokenStructure {
                 
             } catch {
                 XCTFail("should be a BadTokenStructure error \(error)")
@@ -30,7 +30,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidHeaderRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.CannotDecodeBase64Part(.Header,_) {
+        } catch JSONWebToken.Error.cannotDecodeBase64Part(.header,_) {
             
         } catch {
             XCTFail("should be a .CannotDecodeBase64Part(.Header) error \(error)")
@@ -40,7 +40,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidPayloadRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.CannotDecodeBase64Part(.Payload,_) {
+        } catch JSONWebToken.Error.cannotDecodeBase64Part(.payload,_) {
             
         } catch {
             XCTFail("should be a .CannotDecodeBase64Part(.Payload) error \(error)")
@@ -50,7 +50,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidSignatureRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.CannotDecodeBase64Part(.Signature,_) {
+        } catch JSONWebToken.Error.cannotDecodeBase64Part(.signature,_) {
             
         } catch {
             XCTFail("should be a .CannotDecodeBase64Part(.Signature) error \(error)")
@@ -63,7 +63,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidHeaderRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.InvalidJSON(.Header,_) {
+        } catch JSONWebToken.Error.invalidJSON(.header,_) {
             
         } catch {
             XCTFail("should be a .InvalidJSON(.Header) error \(error)")
@@ -73,7 +73,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidPayloadRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.InvalidJSON(.Payload,_) {
+        } catch JSONWebToken.Error.invalidJSON(.payload,_) {
             
         } catch {
             XCTFail("should be a .InvalidJSON(.Payload) error \(error)")
@@ -86,7 +86,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidHeaderRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.InvalidJSONStructure(.Header) {
+        } catch JSONWebToken.Error.invalidJSONStructure(.header) {
             
         } catch {
             XCTFail("should be a .InvalidJSON(.Header) error \(error)")
@@ -96,7 +96,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidPayloadRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.InvalidJSONStructure(.Payload) {
+        } catch JSONWebToken.Error.invalidJSONStructure(.payload) {
             
         } catch {
             XCTFail("should be a .InvalidJSON(.Payload) error \(error)")
@@ -107,7 +107,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : missingAlgRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.MissingSignatureAlgorithm {
+        } catch JSONWebToken.Error.missingSignatureAlgorithm {
             
         } catch {
             XCTFail("should be a .MissingSignatureAlgorithm error \(error)")
@@ -117,7 +117,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidAlgRawJWT)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.InvalidSignatureAlgorithm("RS9000") {
+        } catch JSONWebToken.Error.invalidSignatureAlgorithm("RS9000") {
             
         } catch {
             XCTFail("should be a .InvalidSignatureAlgorithm error \(error)")
@@ -134,7 +134,7 @@ class DecodeTests : XCTestCase {
         do {
             let _ = try JSONWebToken(string : invalidTyp)
             XCTFail("should fail")
-        } catch JSONWebToken.Error.TypeIsNotAJSONWebToken {
+        } catch JSONWebToken.Error.typeIsNotAJSONWebToken {
             
         } catch {
             XCTFail("should be a .TypeIsNotAJSONWebToken error \(error)")

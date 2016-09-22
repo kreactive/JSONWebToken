@@ -22,43 +22,43 @@ class HMACTests : XCTestCase {
     }
     func testHS256VerifySuccess() {
         let jwt = ReadSampleWithName("HS256")
-        let verifier = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA256)
+        let verifier = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha256)
         let result = verifier.validateToken(jwt)
         XCTAssertTrue(result.isValid)
     }
     func testHS256VerifyFailure() {
         let jwt = ReadSampleWithName("HS256")
-        let verifier = HMACSignature(secret: "secretr".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA256)
+        let verifier = HMACSignature(secret: "secretr".data(using: String.Encoding.utf8)!, hashFunction: .sha256)
         let result = verifier.validateToken(jwt)
         XCTAssertFalse(result.isValid)
     }
     func testHS384VerifySuccess() {
         let jwt = ReadSampleWithName("HS384")
-        let verifier = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA384)
+        let verifier = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha384)
         let result = verifier.validateToken(jwt)
         XCTAssertTrue(result.isValid)
     }
     func testHS384VerifyFailure() {
         let jwt = ReadSampleWithName("HS384")
-        let verifier = HMACSignature(secret: "secretr".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA384)
+        let verifier = HMACSignature(secret: "secretr".data(using: String.Encoding.utf8)!, hashFunction: .sha384)
         let result = verifier.validateToken(jwt)
         XCTAssertFalse(result.isValid)
     }
     func testHS512VerifySuccess() {
         let jwt = ReadSampleWithName("HS512")
-        let verifier = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
+        let verifier = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha512)
         let result = verifier.validateToken(jwt)
         XCTAssertTrue(result.isValid)
     }
     func testHS512VerifyFailure() {
         let jwt = ReadSampleWithName("HS512")
-        let verifier = HMACSignature(secret: "secretr".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
+        let verifier = HMACSignature(secret: "secretr".data(using: String.Encoding.utf8)!, hashFunction: .sha512)
         let result = verifier.validateToken(jwt)
         XCTAssertFalse(result.isValid)
     }
     
     func testHS256Sign() {
-        let signer = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA256)
+        let signer = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha256)
         do {
             let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
             let verifier = signer
@@ -70,7 +70,7 @@ class HMACTests : XCTestCase {
 
     }
     func testHS384Sign() {
-        let signer = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA384)
+        let signer = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha384)
         do {
             let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
             let verifier = signer
@@ -81,7 +81,7 @@ class HMACTests : XCTestCase {
         }
     }
     func testHS512Sign() {
-        let signer = HMACSignature(secret: "secret".dataUsingEncoding(NSUTF8StringEncoding)!, hashFunction: .SHA512)
+        let signer = HMACSignature(secret: "secret".data(using: String.Encoding.utf8)!, hashFunction: .sha512)
         do {
             let jwt = try JSONWebToken(payload : SamplePayload, signer : signer)
             let verifier = signer

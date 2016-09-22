@@ -9,20 +9,20 @@ import Foundation
 
 public struct JSONWebToken {
     
-    public enum Error : ErrorType {
-        case BadTokenStructure
-        case CannotDecodeBase64Part(JSONWebToken.Part,String)
-        case InvalidJSON(JSONWebToken.Part,ErrorType)
-        case InvalidJSONStructure(JSONWebToken.Part)
-        case TypeIsNotAJSONWebToken
-        case InvalidSignatureAlgorithm(String)
-        case MissingSignatureAlgorithm
+    public indirect enum Error : Swift.Error {
+        case badTokenStructure
+        case cannotDecodeBase64Part(JSONWebToken.Part,String)
+        case invalidJSON(JSONWebToken.Part,Swift.Error)
+        case invalidJSONStructure(JSONWebToken.Part)
+        case typeIsNotAJSONWebToken
+        case invalidSignatureAlgorithm(String)
+        case missingSignatureAlgorithm
 
     }
     public enum Part {
-        case Header
-        case Payload
-        case Signature
+        case header
+        case payload
+        case signature
     }
     
     public struct Payload {
@@ -36,34 +36,34 @@ public struct JSONWebToken {
             case JWTIdentifier = "jti"
         }
         
-        var jsonPayload : [String : AnyObject]
-        private init(jsonPayload : [String : AnyObject]) {
+        var jsonPayload : [String : Any]
+        fileprivate init(jsonPayload : [String : Any]) {
             self.jsonPayload = jsonPayload
         }
         public init() {
             jsonPayload = Dictionary()
         }
-        public subscript(key : String) -> AnyObject? {
+        public subscript(key : String) -> Any? {
             get {
                 let result = jsonPayload[key]
                 switch result {
-                case .Some(let value) where value is NSNull:
+                case .some(let value) where value is NSNull:
                     return nil
-                case .Some(_):
+                case .some(_):
                     return result
-                case .None:
+                case .none:
                     return nil
                 }
             }
             set {
                 if newValue == nil || newValue is NSNull {
-                    jsonPayload.removeValueForKey(key)
+                    jsonPayload.removeValue(forKey: key)
                 } else {
                     jsonPayload[key] = newValue
                 }
             }
         }
-        private subscript(registeredClaim : RegisteredClaim) -> AnyObject? {
+        fileprivate subscript(registeredClaim : RegisteredClaim) -> Any? {
             get {
                 return self[registeredClaim.rawValue]
             }
@@ -102,10 +102,10 @@ public struct JSONWebToken {
                 }
             }
         }
-        private static func jsonClaimValueFromDate(date : NSDate?) -> NSNumber? {
-            return date.map { NSNumber(longLong: Int64($0.timeIntervalSince1970)) }
+        fileprivate static func jsonClaimValueFromDate(_ date : Date?) -> NSNumber? {
+            return date.map { NSNumber(value: Int64($0.timeIntervalSince1970)) }
         }
-        public var expiration : NSDate? {
+        public var expiration : Date? {
             get {
                 return (try? self[.ExpirationTime].map(RegisteredClaimValidator.expiration.transform)) ?? nil
             }
@@ -114,7 +114,7 @@ public struct JSONWebToken {
             }
         }
         
-        public var notBefore : NSDate? {
+        public var notBefore : Date? {
             get {
                 return (try? self[.NotBefore].map(RegisteredClaimValidator.notBefore.transform)) ?? nil
             }
@@ -123,7 +123,7 @@ public struct JSONWebToken {
             }
         }
         
-        public var issuedAt : NSDate? {
+        public var issuedAt : Date? {
             get {
                 return (try? self[.IssuedAt].map(RegisteredClaimValidator.issuedAt.transform)) ?? nil
             }
@@ -148,61 +148,61 @@ public struct JSONWebToken {
     
     public init(string input: String) throws {
 
-        let parts = input.componentsSeparatedByString(".")
-        guard parts.count == 3 else { throw Error.BadTokenStructure }
+        let parts = input.components(separatedBy: ".")
+        guard parts.count == 3 else { throw Error.badTokenStructure }
         
         self.base64Parts = (parts[0],parts[1],parts[2])
         
-        guard let headerData = NSData(jwt_base64URLEncodedString: base64Parts.header, options: []) else {
-            throw Error.CannotDecodeBase64Part(.Header,base64Parts.header)
+        guard let headerData = Data(jwt_base64URLEncodedString: base64Parts.header, options: []) else {
+            throw Error.cannotDecodeBase64Part(.header,base64Parts.header)
         }
-        guard let payloadData = NSData(jwt_base64URLEncodedString: base64Parts.payload, options: []) else {
-            throw Error.CannotDecodeBase64Part(.Payload,base64Parts.payload)
+        guard let payloadData = Data(jwt_base64URLEncodedString: base64Parts.payload, options: []) else {
+            throw Error.cannotDecodeBase64Part(.payload,base64Parts.payload)
         }
-        guard NSData(jwt_base64URLEncodedString: base64Parts.signature, options: []) != nil else {
-            throw Error.CannotDecodeBase64Part(.Signature,base64Parts.signature)
+        guard Data(jwt_base64URLEncodedString: base64Parts.signature, options: []) != nil else {
+            throw Error.cannotDecodeBase64Part(.signature,base64Parts.signature)
         }
         
-        let jsonHeader = try JSONWebToken.jwtJSONFromData(headerData,part: .Header)
+        let jsonHeader = try JSONWebToken.jwtJSONFromData(headerData,part: .header)
         
-        guard (jsonHeader["typ"] as? String).map({$0.uppercaseString == "JWT"}) ?? true else {
-            throw Error.TypeIsNotAJSONWebToken
+        guard (jsonHeader["typ"] as? String).map({$0.uppercased() == "JWT"}) ?? true else {
+            throw Error.typeIsNotAJSONWebToken
         }
         guard let signatureAlgorithm = try (jsonHeader["alg"] as? String).map(SignatureAlgorithm.init) else {
-            throw Error.MissingSignatureAlgorithm
+            throw Error.missingSignatureAlgorithm
         }
         self.signatureAlgorithm = signatureAlgorithm
         
-        let jsonPayload = try JSONWebToken.jwtJSONFromData(payloadData,part: .Payload)
+        let jsonPayload = try JSONWebToken.jwtJSONFromData(payloadData,part: .payload)
 
         self.payload = Payload(jsonPayload: jsonPayload)
     }
-    private static func jwtJSONFromData(data : NSData, part : JSONWebToken.Part) throws -> [String : AnyObject] {
-        let json : AnyObject
+    fileprivate static func jwtJSONFromData(_ data : Data, part : JSONWebToken.Part) throws -> [String : Any] {
+        let json : Any
         do {
-            json = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+            json = try JSONSerialization.jsonObject(with: data, options: [])
         } catch {
-            throw Error.InvalidJSON(part,error)
+            throw Error.invalidJSON(part,error)
         }
-        guard let result = json as? [String : AnyObject] else {
-            throw Error.InvalidJSONStructure(part)
+        guard let result = json as? [String : Any] else {
+            throw Error.invalidJSONStructure(part)
         }
         return result
     }
     
     public init(payload : Payload, signer : TokenSigner? = nil) throws {
-        self.signatureAlgorithm = signer?.signatureAlgorithm ?? SignatureAlgorithm.None
+        self.signatureAlgorithm = signer?.signatureAlgorithm ?? SignatureAlgorithm.none
         self.payload = payload
         
         let header = ["alg" : self.signatureAlgorithm.jwtIdentifier , "typ" : "JWT"]
-        let headerBase64 = try NSJSONSerialization.dataWithJSONObject(header, options: []).jwt_base64URLEncodedStringWithOptions([])
-        let payloadBase64 = try NSJSONSerialization.dataWithJSONObject(payload.jsonPayload, options: []).jwt_base64URLEncodedStringWithOptions([])
+        let headerBase64 = try JSONSerialization.data(withJSONObject: header, options: []).jwt_base64URLEncodedStringWithOptions([])
+        let payloadBase64 = try JSONSerialization.data(withJSONObject: payload.jsonPayload, options: []).jwt_base64URLEncodedStringWithOptions([])
         
         let signatureInput = headerBase64 + "." + payloadBase64
         
         let signature = try signer.map {
-            try $0.sign(signatureInput.dataUsingEncoding(NSUTF8StringEncoding)!)
-        } ?? NSData()
+            try $0.sign(signatureInput.data(using: String.Encoding.utf8)!)
+        } ?? Data()
         
         let signatureBase64 = signature.jwt_base64URLEncodedStringWithOptions([])
         
@@ -210,21 +210,21 @@ public struct JSONWebToken {
     }
     
     
-    public func decodedDataForPart(part : Part) -> NSData {
+    public func decodedDataForPart(_ part : Part) -> Data {
         switch part {
-        case .Header:
-            return NSData(jwt_base64URLEncodedString: base64Parts.header, options: [])!
-        case .Payload:
-            return NSData(jwt_base64URLEncodedString: base64Parts.payload, options: [])!
-        case .Signature:
-            return NSData(jwt_base64URLEncodedString: base64Parts.signature, options: [])!
+        case .header:
+            return Data(jwt_base64URLEncodedString: base64Parts.header, options: [])!
+        case .payload:
+            return Data(jwt_base64URLEncodedString: base64Parts.payload, options: [])!
+        case .signature:
+            return Data(jwt_base64URLEncodedString: base64Parts.signature, options: [])!
         }
     }
     
     public var rawString : String {
         return "\(base64Parts.header).\(base64Parts.payload).\(base64Parts.signature)"
     }
-    public var rawData : NSData {
-        return self.rawString.dataUsingEncoding(NSUTF8StringEncoding)!
+    public var rawData : Data {
+        return self.rawString.data(using: String.Encoding.utf8)!
     }
 }
