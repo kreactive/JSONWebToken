@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE plist PUBLIC "-/  
+<plist version="1.0">  
+    <dict>  
+        <key>get-task-allow</key>  
+        <true/>  
+    </dict>  
+</plist>  

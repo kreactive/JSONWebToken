@@ -105,14 +105,14 @@ public struct RSAPKCS1Verifier : SignatureValidator {
         let signedDataHash = (input as NSData).jwt_shaDigest(withSize: self.hashFunction.rawValue)
         let padding = paddingForHashFunction(self.hashFunction)
         
-        let result = input.withUnsafeBytes { inputRawPointer in
+        let result = signature.withUnsafeBytes { signatureRawPointer in
             signedDataHash.withUnsafeBytes { signedHashRawPointer in
                 SecKeyRawVerify(
                     key.value,
                     padding,
                     signedHashRawPointer,
                     signedDataHash.count,
-                    inputRawPointer,
+                    signatureRawPointer,
                     signature.count
                 )
             }

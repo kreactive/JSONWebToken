@@ -10,6 +10,11 @@
 		7148BE9D1BFE2FA400CD17E7 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148BE9C1BFE2FA400CD17E7 /* TestUtils.swift */; };
 		7148BEA11BFF0B0B00CD17E7 /* SecKeyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148BEA01BFF0B0B00CD17E7 /* SecKeyUtils.swift */; };
 		7148BEA31BFF6FF500CD17E7 /* ClaimValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148BEA21BFF6FF500CD17E7 /* ClaimValidator.swift */; };
+		71642F421D9BB1F2008BBA95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71642F411D9BB1F2008BBA95 /* AppDelegate.swift */; };
+		71642F441D9BB1F2008BBA95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71642F431D9BB1F2008BBA95 /* ViewController.swift */; };
+		71642F471D9BB1F2008BBA95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71642F451D9BB1F2008BBA95 /* Main.storyboard */; };
+		71642F491D9BB1F2008BBA95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71642F481D9BB1F2008BBA95 /* Assets.xcassets */; };
+		71642F4C1D9BB1F2008BBA95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71642F4A1D9BB1F2008BBA95 /* LaunchScreen.storyboard */; };
 		717ACFD21BFB6842004E01D0 /* JSONWebToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 717ACFD11BFB6842004E01D0 /* JSONWebToken.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717ACFDE1BFB6842004E01D0 /* RSASSA_PKCS1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFDD1BFB6842004E01D0 /* RSASSA_PKCS1Tests.swift */; };
 		717ACFE91BFB69EB004E01D0 /* JSONWebToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFE81BFB69EB004E01D0 /* JSONWebToken.swift */; };
@@ -158,6 +163,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		71642F511D9BB210008BBA95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 717ACFC51BFB6842004E01D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 71642F3E1D9BB1F2008BBA95;
+			remoteInfo = TestContainer;
+		};
 		7190899D1C036F6B00A7A209 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 717ACFC51BFB6842004E01D0 /* Project object */;
@@ -178,6 +190,14 @@
 		7148BE9C1BFE2FA400CD17E7 /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		7148BEA01BFF0B0B00CD17E7 /* SecKeyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecKeyUtils.swift; sourceTree = "<group>"; };
 		7148BEA21BFF6FF500CD17E7 /* ClaimValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClaimValidator.swift; sourceTree = "<group>"; };
+		71642F3A1D9BB138008BBA95 /* JSONWebToken.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = JSONWebToken.entitlements; sourceTree = "<group>"; };
+		71642F3F1D9BB1F2008BBA95 /* TestContainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestContainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		71642F411D9BB1F2008BBA95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		71642F431D9BB1F2008BBA95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		71642F461D9BB1F2008BBA95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		71642F481D9BB1F2008BBA95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		71642F4B1D9BB1F2008BBA95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		71642F4D1D9BB1F2008BBA95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		717ACFCE1BFB6842004E01D0 /* JSONWebToken.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSONWebToken.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		717ACFD11BFB6842004E01D0 /* JSONWebToken.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONWebToken.h; sourceTree = "<group>"; };
 		717ACFD31BFB6842004E01D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -259,6 +279,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		71642F3C1D9BB1F2008BBA95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		717ACFCA1BFB6842004E01D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -292,6 +319,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71642F401D9BB1F2008BBA95 /* TestContainer */ = {
+			isa = PBXGroup;
+			children = (
+				71642F411D9BB1F2008BBA95 /* AppDelegate.swift */,
+				71642F431D9BB1F2008BBA95 /* ViewController.swift */,
+				71642F451D9BB1F2008BBA95 /* Main.storyboard */,
+				71642F481D9BB1F2008BBA95 /* Assets.xcassets */,
+				71642F4A1D9BB1F2008BBA95 /* LaunchScreen.storyboard */,
+				71642F4D1D9BB1F2008BBA95 /* Info.plist */,
+			);
+			path = TestContainer;
+			sourceTree = "<group>";
+		};
 		717ACFC41BFB6842004E01D0 = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +339,7 @@
 				717ACFDC1BFB6842004E01D0 /* JSONWebTokenTests */,
 				719156991D1D3BE900FC55C9 /* JSONWebToken tvOS */,
 				719156A51D1D3BE900FC55C9 /* JSONWebToken tvOSTests */,
+				71642F401D9BB1F2008BBA95 /* TestContainer */,
 				717ACFCF1BFB6842004E01D0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -310,6 +351,7 @@
 				717ACFD81BFB6842004E01D0 /* JSONWebTokenTests.xctest */,
 				719156981D1D3BE900FC55C9 /* JSONWebToken.framework */,
 				719156A11D1D3BE900FC55C9 /* JSONWebToken tvOSTests.xctest */,
+				71642F3F1D9BB1F2008BBA95 /* TestContainer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,6 +373,7 @@
 				717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */,
 				717ACFF41BFB8113004E01D0 /* NSData+Base64URLEncoding.swift */,
 				7148BEA01BFF0B0B00CD17E7 /* SecKeyUtils.swift */,
+				71642F3A1D9BB138008BBA95 /* JSONWebToken.entitlements */,
 			);
 			path = JSONWebToken;
 			sourceTree = "<group>";
@@ -461,6 +504,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		71642F3E1D9BB1F2008BBA95 /* TestContainer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71642F4E1D9BB1F2008BBA95 /* Build configuration list for PBXNativeTarget "TestContainer" */;
+			buildPhases = (
+				71642F3B1D9BB1F2008BBA95 /* Sources */,
+				71642F3C1D9BB1F2008BBA95 /* Frameworks */,
+				71642F3D1D9BB1F2008BBA95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestContainer;
+			productName = TestContainer;
+			productReference = 71642F3F1D9BB1F2008BBA95 /* TestContainer.app */;
+			productType = "com.apple.product-type.application";
+		};
 		717ACFCD1BFB6842004E01D0 /* JSONWebToken */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 717ACFE21BFB6842004E01D0 /* Build configuration list for PBXNativeTarget "JSONWebToken" */;
@@ -491,6 +551,7 @@
 			);
 			dependencies = (
 				7190899E1C036F6B00A7A209 /* PBXTargetDependency */,
+				71642F521D9BB210008BBA95 /* PBXTargetDependency */,
 			);
 			name = JSONWebTokenTests;
 			productName = JSONWebTokenTests;
@@ -539,10 +600,15 @@
 		717ACFC51BFB6842004E01D0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Antoine Palazzolo";
 				TargetAttributes = {
+					71642F3E1D9BB1F2008BBA95 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = GFAP5NDM59;
+						ProvisioningStyle = Automatic;
+					};
 					717ACFCD1BFB6842004E01D0 = {
 						CreatedOnToolsVersion = 7.1.1;
 						LastSwiftMigration = 0800;
@@ -551,6 +617,7 @@
 						CreatedOnToolsVersion = 7.1.1;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Manual;
+						TestTargetID = 71642F3E1D9BB1F2008BBA95;
 					};
 					719156971D1D3BE900FC55C9 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -566,6 +633,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 717ACFC41BFB6842004E01D0;
 			productRefGroup = 717ACFCF1BFB6842004E01D0 /* Products */;
@@ -576,11 +644,22 @@
 				717ACFD71BFB6842004E01D0 /* JSONWebTokenTests */,
 				719156971D1D3BE900FC55C9 /* JSONWebToken tvOS */,
 				719156A01D1D3BE900FC55C9 /* JSONWebToken tvOSTests */,
+				71642F3E1D9BB1F2008BBA95 /* TestContainer */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		71642F3D1D9BB1F2008BBA95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71642F4C1D9BB1F2008BBA95 /* LaunchScreen.storyboard in Resources */,
+				71642F491D9BB1F2008BBA95 /* Assets.xcassets in Resources */,
+				71642F471D9BB1F2008BBA95 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		717ACFCC1BFB6842004E01D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -710,6 +789,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		71642F3B1D9BB1F2008BBA95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71642F441D9BB1F2008BBA95 /* ViewController.swift in Sources */,
+				71642F421D9BB1F2008BBA95 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		717ACFC91BFB6842004E01D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -783,6 +871,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		71642F521D9BB210008BBA95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 71642F3E1D9BB1F2008BBA95 /* TestContainer */;
+			targetProxy = 71642F511D9BB210008BBA95 /* PBXContainerItemProxy */;
+		};
 		7190899E1C036F6B00A7A209 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 717ACFCD1BFB6842004E01D0 /* JSONWebToken */;
@@ -795,7 +888,63 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		71642F451D9BB1F2008BBA95 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				71642F461D9BB1F2008BBA95 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		71642F4A1D9BB1F2008BBA95 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				71642F4B1D9BB1F2008BBA95 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		71642F4F1D9BB1F2008BBA95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = JSONWebToken/JSONWebToken.entitlements;
+				DEVELOPMENT_TEAM = GFAP5NDM59;
+				INFOPLIST_FILE = TestContainer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Kreactive.TestContainer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		71642F501D9BB1F2008BBA95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = JSONWebToken/JSONWebToken.entitlements;
+				DEVELOPMENT_TEAM = GFAP5NDM59;
+				INFOPLIST_FILE = TestContainer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Kreactive.TestContainer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 		717ACFE01BFB6842004E01D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -943,6 +1092,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kreactive.JSONWebTokenTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestContainer.app/TestContainer";
 			};
 			name = Debug;
 		};
@@ -955,6 +1105,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kreactive.JSONWebTokenTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestContainer.app/TestContainer";
 			};
 			name = Release;
 		};
@@ -1033,6 +1184,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		71642F4E1D9BB1F2008BBA95 /* Build configuration list for PBXNativeTarget "TestContainer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71642F4F1D9BB1F2008BBA95 /* Debug */,
+				71642F501D9BB1F2008BBA95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		717ACFC81BFB6842004E01D0 /* Build configuration list for PBXProject "JSONWebToken" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
