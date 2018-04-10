@@ -336,6 +336,6 @@ private extension Data {
             }
         }
         
-        return self.subdata(in : range.toRange()!)
+        return self.subdata(in : Range(range)!)
     }
 }
