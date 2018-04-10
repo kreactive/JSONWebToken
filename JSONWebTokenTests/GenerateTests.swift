@@ -56,7 +56,7 @@ class GenerateTests : XCTestCase {
 
             payload.expiration = expirationDate
             XCTAssertNotNil(payload.expiration)
-            XCTAssertEqualWithAccuracy(payload.expiration!.timeIntervalSince1970, expirationDate.timeIntervalSince1970, accuracy: 0.9999999)
+            XCTAssertEqual(payload.expiration!.timeIntervalSince1970, expirationDate.timeIntervalSince1970, accuracy: 0.9999999)
             payload.expiration = nil
             XCTAssertNil(payload.expiration)
             payload.expiration = expirationDate
@@ -65,7 +65,7 @@ class GenerateTests : XCTestCase {
 
             payload.notBefore = notBeforeDate
             XCTAssertNotNil(payload.notBefore)
-            XCTAssertEqualWithAccuracy(payload.notBefore!.timeIntervalSince1970, notBeforeDate.timeIntervalSince1970, accuracy: 0.9999999)
+            XCTAssertEqual(payload.notBefore!.timeIntervalSince1970, notBeforeDate.timeIntervalSince1970, accuracy: 0.9999999)
             payload.notBefore = nil
             XCTAssertNil(payload.notBefore)
             payload.notBefore = notBeforeDate
@@ -73,7 +73,7 @@ class GenerateTests : XCTestCase {
             let issuedAtDate = Date()
             payload.issuedAt = issuedAtDate
             XCTAssertNotNil(payload.issuedAt)
-            XCTAssertEqualWithAccuracy(payload.issuedAt!.timeIntervalSince1970, issuedAtDate.timeIntervalSince1970, accuracy: 0.9999999)
+            XCTAssertEqual(payload.issuedAt!.timeIntervalSince1970, issuedAtDate.timeIntervalSince1970, accuracy: 0.9999999)
             payload.issuedAt = nil
             XCTAssertNil(payload.issuedAt)
             payload.issuedAt = issuedAtDate

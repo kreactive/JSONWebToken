@@ -40,7 +40,7 @@ public func &(lhs : JSONWebTokenValidatorType, rhs : JSONWebTokenValidatorType) 
             } else {
                 return nil
             }
-            }.flatMap {$0}
+            }.compactMap {$0}
         return errors.count > 0 ? .failure(CombinedValidatorError(errors: errors)) : .success
     }
     return JSONWebTokenValidator(validator: and)
