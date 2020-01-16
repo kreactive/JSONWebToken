@@ -106,7 +106,7 @@ public extension RSAKey {
         return try RSAKey.registerOrUpdateKey(decodedKeyData, tag: tag)
     }
     static func registeredKeyWithTag(_ tag : String) -> RSAKey? {
-        return ((try? getKey(tag)) ?? nil).map(RSAKey.init)
+        return ((((try? getKey(tag)) as SecKey??)) ?? nil).map(RSAKey.init)
     }
     static func removeKeyWithTag(_ tag : String) {
         do {
