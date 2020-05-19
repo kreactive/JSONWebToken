@@ -21,8 +21,6 @@
 		717ACFF51BFB8113004E01D0 /* NSData+Base64URLEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFF41BFB8113004E01D0 /* NSData+Base64URLEncoding.swift */; };
 		717ACFF71BFC7BB8004E01D0 /* SignatureValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFF61BFC7BB8004E01D0 /* SignatureValidator.swift */; };
 		717ACFF91BFC81CB004E01D0 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFF81BFC81CB004E01D0 /* HMAC.swift */; };
-		717ACFFC1BFC827E004E01D0 /* NSData+HMAC.h in Headers */ = {isa = PBXBuildFile; fileRef = 717ACFFA1BFC827E004E01D0 /* NSData+HMAC.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		717ACFFD1BFC827E004E01D0 /* NSData+HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */; };
 		717ACFFF1BFC8393004E01D0 /* SignatureAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFFE1BFC8393004E01D0 /* SignatureAlgorithm.swift */; };
 		717FCFD31C060CDA00C7DDEB /* invalid_aud_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCA1C060CDA00C7DDEB /* invalid_aud_format.jwt */; };
 		717FCFD41C060CDA00C7DDEB /* invalid_exp_format.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 717FCFCB1C060CDA00C7DDEB /* invalid_exp_format.jwt */; };
@@ -137,12 +135,8 @@
 		719156EF1D1D3C9300FC55C9 /* TokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EA699B1C0320720081AF85 /* TokenValidator.swift */; };
 		719156F01D1D3C9B00FC55C9 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFF81BFC81CB004E01D0 /* HMAC.swift */; };
 		719156F11D1D3C9B00FC55C9 /* RSASSA_PKCS1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D1C1211BFCB92200211578 /* RSASSA_PKCS1.swift */; };
-		719156F21D1D3C9B00FC55C9 /* NSData+SHA.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D1C1241BFE236F00211578 /* NSData+SHA.m */; };
-		719156F31D1D3C9B00FC55C9 /* NSData+HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */; };
 		719156F41D1D3C9B00FC55C9 /* NSData+Base64URLEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ACFF41BFB8113004E01D0 /* NSData+Base64URLEncoding.swift */; };
 		719156F51D1D3C9B00FC55C9 /* SecKeyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148BEA01BFF0B0B00CD17E7 /* SecKeyUtils.swift */; };
-		719156F61D1D3C9E00FC55C9 /* NSData+SHA.h in Headers */ = {isa = PBXBuildFile; fileRef = 71D1C1231BFE236F00211578 /* NSData+SHA.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		719156F71D1D3C9E00FC55C9 /* NSData+HMAC.h in Headers */ = {isa = PBXBuildFile; fileRef = 717ACFFA1BFC827E004E01D0 /* NSData+HMAC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71936BEF1C0361D60005DF5A /* HMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EA69A41C035EA90081AF85 /* HMACTests.swift */; };
 		7194540A1C05F6AC0043493C /* identity.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 719454091C05F4CB0043493C /* identity.p12 */; };
 		7194540E1C05FBBB0043493C /* PS256.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 7194540B1C05FBBB0043493C /* PS256.jwt */; };
@@ -154,9 +148,8 @@
 		719454181C05FE510043493C /* ES512.jwt in Resources */ = {isa = PBXBuildFile; fileRef = 719454151C05FE510043493C /* ES512.jwt */; };
 		7194541A1C05FE990043493C /* ECDSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719454191C05FE990043493C /* ECDSATests.swift */; };
 		7194541C1C0600EA0043493C /* GenerateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7194541B1C0600EA0043493C /* GenerateTests.swift */; };
+		71AF7F492474191A00DDF6C0 /* Data+hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF7F482474191A00DDF6C0 /* Data+hash.swift */; };
 		71D1C1221BFCB92200211578 /* RSASSA_PKCS1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D1C1211BFCB92200211578 /* RSASSA_PKCS1.swift */; };
-		71D1C1251BFE236F00211578 /* NSData+SHA.h in Headers */ = {isa = PBXBuildFile; fileRef = 71D1C1231BFE236F00211578 /* NSData+SHA.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71D1C1261BFE236F00211578 /* NSData+SHA.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D1C1241BFE236F00211578 /* NSData+SHA.m */; };
 		71D917A01C07573300FA5CDE /* TestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 71D9179F1C07573300FA5CDE /* TestCertificate.cer */; };
 		71EA699C1C0320720081AF85 /* TokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EA699B1C0320720081AF85 /* TokenValidator.swift */; };
 		71EA699F1C0323320081AF85 /* TokenSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EA699E1C0323320081AF85 /* TokenSigner.swift */; };
@@ -208,8 +201,6 @@
 		717ACFF41BFB8113004E01D0 /* NSData+Base64URLEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+Base64URLEncoding.swift"; sourceTree = "<group>"; };
 		717ACFF61BFC7BB8004E01D0 /* SignatureValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureValidator.swift; sourceTree = "<group>"; };
 		717ACFF81BFC81CB004E01D0 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
-		717ACFFA1BFC827E004E01D0 /* NSData+HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+HMAC.h"; sourceTree = "<group>"; };
-		717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+HMAC.m"; sourceTree = "<group>"; };
 		717ACFFE1BFC8393004E01D0 /* SignatureAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureAlgorithm.swift; sourceTree = "<group>"; };
 		717FCFCA1C060CDA00C7DDEB /* invalid_aud_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_aud_format.jwt; sourceTree = "<group>"; };
 		717FCFCB1C060CDA00C7DDEB /* invalid_exp_format.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_exp_format.jwt; sourceTree = "<group>"; };
@@ -269,9 +260,8 @@
 		719454151C05FE510043493C /* ES512.jwt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ES512.jwt; sourceTree = "<group>"; };
 		719454191C05FE990043493C /* ECDSATests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECDSATests.swift; sourceTree = "<group>"; };
 		7194541B1C0600EA0043493C /* GenerateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateTests.swift; sourceTree = "<group>"; };
+		71AF7F482474191A00DDF6C0 /* Data+hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+hash.swift"; sourceTree = "<group>"; };
 		71D1C1211BFCB92200211578 /* RSASSA_PKCS1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSASSA_PKCS1.swift; sourceTree = "<group>"; };
-		71D1C1231BFE236F00211578 /* NSData+SHA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SHA.h"; sourceTree = "<group>"; };
-		71D1C1241BFE236F00211578 /* NSData+SHA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SHA.m"; sourceTree = "<group>"; };
 		71D9179F1C07573300FA5CDE /* TestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestCertificate.cer; sourceTree = "<group>"; };
 		71EA699B1C0320720081AF85 /* TokenValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenValidator.swift; sourceTree = "<group>"; };
 		71EA699E1C0323320081AF85 /* TokenSigner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenSigner.swift; sourceTree = "<group>"; };
@@ -367,10 +357,7 @@
 				71EA699A1C0320630081AF85 /* Validator */,
 				717ACFF81BFC81CB004E01D0 /* HMAC.swift */,
 				71D1C1211BFCB92200211578 /* RSASSA_PKCS1.swift */,
-				71D1C1231BFE236F00211578 /* NSData+SHA.h */,
-				71D1C1241BFE236F00211578 /* NSData+SHA.m */,
-				717ACFFA1BFC827E004E01D0 /* NSData+HMAC.h */,
-				717ACFFB1BFC827E004E01D0 /* NSData+HMAC.m */,
+				71AF7F482474191A00DDF6C0 /* Data+hash.swift */,
 				717ACFF41BFB8113004E01D0 /* NSData+Base64URLEncoding.swift */,
 				7148BEA01BFF0B0B00CD17E7 /* SecKeyUtils.swift */,
 				71642F3A1D9BB138008BBA95 /* JSONWebToken.entitlements */,
@@ -485,8 +472,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				717ACFFC1BFC827E004E01D0 /* NSData+HMAC.h in Headers */,
-				71D1C1251BFE236F00211578 /* NSData+SHA.h in Headers */,
 				717ACFD21BFB6842004E01D0 /* JSONWebToken.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -495,8 +480,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				719156F61D1D3C9E00FC55C9 /* NSData+SHA.h in Headers */,
-				719156F71D1D3C9E00FC55C9 /* NSData+HMAC.h in Headers */,
 				719156AF1D1D3BF900FC55C9 /* JSONWebToken.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -805,11 +788,10 @@
 			files = (
 				717ACFFF1BFC8393004E01D0 /* SignatureAlgorithm.swift in Sources */,
 				71EA699F1C0323320081AF85 /* TokenSigner.swift in Sources */,
-				71D1C1261BFE236F00211578 /* NSData+SHA.m in Sources */,
 				71D1C1221BFCB92200211578 /* RSASSA_PKCS1.swift in Sources */,
-				717ACFFD1BFC827E004E01D0 /* NSData+HMAC.m in Sources */,
 				7148BEA11BFF0B0B00CD17E7 /* SecKeyUtils.swift in Sources */,
 				717ACFE91BFB69EB004E01D0 /* JSONWebToken.swift in Sources */,
+				71AF7F492474191A00DDF6C0 /* Data+hash.swift in Sources */,
 				7148BEA31BFF6FF500CD17E7 /* ClaimValidator.swift in Sources */,
 				717ACFF51BFB8113004E01D0 /* NSData+Base64URLEncoding.swift in Sources */,
 				717ACFF91BFC81CB004E01D0 /* HMAC.swift in Sources */,
@@ -843,13 +825,11 @@
 				719156EC1D1D3C8F00FC55C9 /* TokenSigner.swift in Sources */,
 				719156F11D1D3C9B00FC55C9 /* RSASSA_PKCS1.swift in Sources */,
 				719156EE1D1D3C9300FC55C9 /* ClaimValidator.swift in Sources */,
-				719156F31D1D3C9B00FC55C9 /* NSData+HMAC.m in Sources */,
 				719156EF1D1D3C9300FC55C9 /* TokenValidator.swift in Sources */,
 				719156F01D1D3C9B00FC55C9 /* HMAC.swift in Sources */,
 				719156ED1D1D3C9300FC55C9 /* SignatureValidator.swift in Sources */,
 				719156F51D1D3C9B00FC55C9 /* SecKeyUtils.swift in Sources */,
 				719156F41D1D3C9B00FC55C9 /* NSData+Base64URLEncoding.swift in Sources */,
-				719156F21D1D3C9B00FC55C9 /* NSData+SHA.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

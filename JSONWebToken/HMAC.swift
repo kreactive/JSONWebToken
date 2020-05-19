@@ -22,13 +22,13 @@ public struct HMACSignature : SignatureValidator,TokenSigner {
         return false
     }
     public func verify(_ input : Data, signature : Data) -> Bool {
-        return (input as NSData).jwt_hmacSignature(withSHAHashFuctionSize: self.hashFunction.rawValue, secret: secret) == signature
+        return input.hmac(self.hashFunction, secret: secret) == signature
     }
     
     public var signatureAlgorithm : SignatureAlgorithm {
         return .hmac(self.hashFunction)
     }
     public func sign(_ input : Data) throws -> Data {
-        return (input as NSData).jwt_hmacSignature(withSHAHashFuctionSize: self.hashFunction.rawValue, secret: secret)
+        return input.hmac(self.hashFunction, secret: secret)
     }
 }
