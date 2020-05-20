@@ -22,14 +22,17 @@ extension Data {
                 switch hashFunction {
                 case .sha256:
                     let result = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
+                    defer { result.deallocate() }
                     CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), result.baseAddress)
                     return Data(buffer: result)
                 case .sha384:
                     let result = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA384_DIGEST_LENGTH))
+                    defer { result.deallocate() }
                     CC_SHA384(buffer.baseAddress, CC_LONG(buffer.count), result.baseAddress)
                     return Data(buffer: result)
                 case .sha512:
                     let result = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA512_DIGEST_LENGTH))
+                    defer { result.deallocate() }
                     CC_SHA512(buffer.baseAddress, CC_LONG(buffer.count), result.baseAddress)
                     return Data(buffer: result)
                 }
@@ -64,6 +67,7 @@ extension Data {
                         resultLen = CC_SHA512_DIGEST_LENGTH
                     }
                     let result = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(resultLen))
+                    defer { result.deallocate() }
                     CCHmac(function, secretBuffer.baseAddress, secretBuffer.count, buffer.baseAddress, buffer.count, result.baseAddress)
                     return Data(buffer: result)
                 }
