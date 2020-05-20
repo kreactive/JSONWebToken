@@ -3,7 +3,6 @@
 //  JSONWebToken
 //
 //  Created by Antoine Palazzolo on 17/11/15.
-//  Copyright © 2015 Antoine Palazzolo. All rights reserved.
 //
 
 import Foundation

@@ -102,7 +102,7 @@ public struct RSAPKCS1Verifier : SignatureValidator {
         return false
     }
     public func verify(_ input : Data, signature : Data) -> Bool {
-        let signedDataHash = (input as NSData).jwt_shaDigest(withSize: self.hashFunction.rawValue)
+        let signedDataHash = input.sha(self.hashFunction)
         let padding = paddingForHashFunction(self.hashFunction)
         
         let result = signature.withUnsafeBytes { signatureRawPointer in
@@ -145,7 +145,7 @@ public struct RSAPKCS1Signer : TokenSigner {
     }
 
     public func sign(_ input : Data) throws -> Data {
-        let signedDataHash = (input as NSData).jwt_shaDigest(withSize: self.hashFunction.rawValue)
+        let signedDataHash = input.sha(self.hashFunction)
         let padding = paddingForHashFunction(self.hashFunction)
         
         var result = Data(count: SecKeyGetBlockSize(self.key.value))
