@@ -11,7 +11,7 @@ import CryptoKit
 
 extension Data {
     func sha(_ hashFunction: SignatureAlgorithm.HashFunction) -> Data {
-        if #available(iOSApplicationExtension 13.0, *) {
+        if #available(iOS 13.0, *) {
             switch hashFunction {
             case .sha256: return Data(SHA256.hash(data: self))
             case .sha384: return Data(SHA384.hash(data: self))
@@ -40,7 +40,7 @@ extension Data {
         }
     }
     func hmac(_ hashFunction: SignatureAlgorithm.HashFunction, secret: Data) -> Data {
-        if #available(iOSApplicationExtension 13.0, *) {
+        if #available(iOS 13.0, *) {
             let key = SymmetricKey(data: secret)
             switch hashFunction {
             case .sha256:
