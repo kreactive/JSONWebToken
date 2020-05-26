@@ -180,6 +180,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		276FE5AE247D07610050D6BD /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7148BE9C1BFE2FA400CD17E7 /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		7148BEA01BFF0B0B00CD17E7 /* SecKeyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecKeyUtils.swift; sourceTree = "<group>"; };
 		7148BEA21BFF6FF500CD17E7 /* ClaimValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClaimValidator.swift; sourceTree = "<group>"; };
@@ -325,6 +326,7 @@
 		717ACFC41BFB6842004E01D0 = {
 			isa = PBXGroup;
 			children = (
+				276FE5AE247D07610050D6BD /* Package.swift */,
 				717ACFD01BFB6842004E01D0 /* JSONWebToken */,
 				717ACFDC1BFB6842004E01D0 /* JSONWebTokenTests */,
 				719156991D1D3BE900FC55C9 /* JSONWebToken tvOS */,
