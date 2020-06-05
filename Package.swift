@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.1
 
 import PackageDescription
 
@@ -12,7 +12,7 @@ pkg.platforms = [
 
 let pmk: Target = .target(name: "JSONWebToken")
 pmk.path = "JSONWebToken"
-pkg.swiftLanguageVersions = [5]
+pkg.swiftLanguageVersions = [.v5]
 pkg.targets = [
     pmk,
     .testTarget(name: "JSONWebTokenTests", dependencies: ["JSONWebToken"], path: "JSONWebTokenTests"),
