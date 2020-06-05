@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import CommonCrypto
 import CryptoKit
+import CommonCrypto
 
 extension Data {
     func sha(_ hashFunction: SignatureAlgorithm.HashFunction) -> Data {
