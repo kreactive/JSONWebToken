@@ -6,6 +6,9 @@ let pkg = Package(name: "JSONWebToken")
 pkg.products = [
     .library(name: "JSONWebToken", targets: ["JSONWebToken"]),
 ]
+pkg.platforms = [
+    .iOS(.v11),
+]
 
 let pmk: Target = .target(name: "JSONWebToken")
 pmk.path = "JSONWebToken"
